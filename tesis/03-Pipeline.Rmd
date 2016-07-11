@@ -1,0 +1,22 @@
+---
+output:
+  pdf_document: default
+---
+# Pipeline
+
+(Pipeline)
+Mi forma de validar
+1er parrafo: todo lo anterior se puede plantear de una manera especifica
+- producto utilizando metodos ..
+Datos de entrada
+Apendice: estadisticas de los datos (script R) snipets
+Crisis de y metodos reproducibles
+
+Pipeline- flows de caudritos
+
+resultados de correr el pipeline
+mapas -> mapas predichos
+
+Modelos: bla bla bla
+(utilize estos hiperparámetros)
+ensmable- percepton (ese objeto enorme es mi modelo)- mezclas los tres modelos y eleccion por votacion

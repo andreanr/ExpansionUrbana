@@ -1,0 +1,11 @@
+---
+output:
+  pdf_document: default
+---
+# Resultados
+
+Lees de postgres los resultados
+los mejores 5 -> graficas en la métrica que quiera
+este es el que voy a utlizar para predecir 2015
+ah le atine!
+si fracaso- > esto muestra que hay que tener mayor consideración de los datos

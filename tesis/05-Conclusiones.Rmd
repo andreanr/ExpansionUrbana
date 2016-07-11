@@ -1,0 +1,8 @@
+---
+output:
+  pdf_document: default
+---
+# Conclusiones
+
+automata celular
+Capitulo 1 con resultados
