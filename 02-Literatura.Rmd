@@ -20,7 +20,146 @@ En México se estima que el 63\% de la población vive en áreas urbanas y que c
 
 Modelos supervisados y no supervisados
 
-### Modelos supervisados
-En los modelos de predicción se busca encontrar la relación existente entre las variables explicativas $ X=(X^1, X^2, ..., X^p) $ y la variable de interés (\textit{y}), a través de un modelo probabilístico P(X,\textit{y}). Esto se realiza con la finalidad de poder explicar la relación que existe entre las variables, así como para predecir futuros valores de la variable de interés, dado valores conocidos a las variables explicativas. Una forma de entenderlo, es pensar que la información generada por medio de una caja por la cual las variables explicativas X entran y por el otro lado, la variable de interés sale. Adentro de la caja hay funciones o algoritmos que relacionan las variables explicativas con la variable de interés. Esta idea es ilustrada en la Figura.
+### Modelos supervisados 
+En los modelos de predicción se busca encontrar la relación existente entre las variables explicativas $X=(X^1, X^2, ..., X^p)$ y la variable de interés ($y$), a través de un modelo probabilístico $P(X,y)$. Esto se realiza con la finalidad de poder explicar la relación que existe entre las variables, así como para predecir futuros valores de la variable de interés, dado valores conocidos a las variables explicativas. Una forma de entenderlo, es pensar que la información generada por medio de una caja por la cual las variables explicativas $X$ entran y por el otro lado, la variable de interés sale. Adentro de la caja hay funciones o algoritmos que relacionan las variables explicativas con la variable de interés. Esta idea es ilustrada en la Figura.
 
-Existen muchos modelos de predicción, los cuales utilizan distintas funciones para capturar la relación entre las variables. Dependerá de los datos y de la información que se conozca \textit{a priori} para la elección de dicho modelo. A continuación se describen los modelos de predicción que se utilizarán y compararán.
+Existen muchos modelos de predicción, los cuales utilizan distintas funciones para capturar la relación entre las variables. Dependerá de los datos y de la información que se conozca *a priori* para la elección de dicho modelo. A continuación se describen los modelos de predicción que se utilizarán y compararán.
+
+Al realizar los modelos predictivos, se tomararán tres conjuntos de datos:
+
+* Muestra de Entrenamiento: en este caso son los datos de 2000 $(t_{1})$ para predecir la mancha urbana de 2005 $(t_2)$. Estos datos son los que se utilizan para entrenar los modelos.
+$$t_{1} \rightarrow t_{2}$$
+* Muestra de Validación: en este caso se utilizan los datos de 2005 $(t_{2})$ para predecir la mancha urbana de 2010 $(t_{3})$.Con esta muestra es posible comparar el desempeño de los diferentes modelos. Estos mismo datos nos darán el error real cometido con cada modelo. Esta comparación se realiza analizando qué tanto se ajustan los valores predichos a los reales.
+$$ t_{2} \rightarrow t_{3} $$
+* Muestra de Predicción: son los datos que se utilizan para predecir 2015 $(t_{4})$.
+$$ t_{3} \rightarrow t_{4} $$
+
+<!----------------------------------------------------------------------------------------->
+#### Regresión Logística
+El modelo de regresión logística es un modelo paramétrico de regresión que se utiliza para predecir el resultado de una variable binaria la cual toma valor de 1 si ocurre el suceso y valor de 0 si no ocurre. En este caso el suceso se referirá al hecho de que la observación pertenezca a la mancha urbana o no. 
+
+Este modelo surge a través de querer modelar las probabilidades a través de funciones lineales en $x$ y $y$, al mismo tiempo de asegurarse que la suma de estas probabilidades sume uno y pertenezca al rango [0,1].Establece la siguiente relación entre la probabilidad de que ocurra el suceso a partir de un área de observación que toma ciertos valores conocidos *($x_{i}$'s)*:
+
+$$P(y=1|x_{1},x_{2},...,x_{p}) = \frac{e^{\beta_{0}+\beta_{1}x_{1}+ \beta_{2}x_{2}+...+\beta_{p}x_{p}}}{1+e^{\beta_{0}+\beta_{1}x_{1}+ \beta_{2}x_{2}+...+\beta_{p}x_{p}}}$$
+
+Realizando una transformación monotónica logística: $log[p/(1-p)]$, de esta forma tenemo una relación lineal:
+
+$$log\frac{P(y=0|X=x)}{P(y=1|X=x)} = \beta_{0} + \beta^{T}x$$
+
+Derivado de esta relación, se estiman los parámetros \{$\beta_{0},\beta_{1},...,\beta_{p}$\} por medio del método de máxima verosimilitud, donde se maximiza el logaritmo de la función de verosimilitud:
+
+$$max_{\beta}L(y,\beta) = \sum_{k=1}^n y_{i}ln(p_{i}) + (1 - y_{i})ln(1 - p_{i})$$
+
+Donde *n* es el número de observaciones y $p_{i} = P(y=1|x_{1},x_{2},...,x_{p})$ son las probabilidades condicionales.
+
+Por lo tanto, para cada observación se tendrá una probabilidad estimada de que ocurra el suceso de interés, en este caso si el área de observación pertenece a la mancha urbana o no.
+
+<!----------------------------------------------------------------------------------------->
+#### Árboles de Clasificación
+
+Un árbol de clasificación es un modelo de predicción no paramétrico de aprendizaje estadístico. El método genera reglas de clasificación representadas en forma de una estructura de árbol como se muestra en la Figura. Se utilizan principalmente para hacer clasificaciones y predicciones, además asignan probabilidades, de acuerdo a la hoja a la que fueron clasificados los datos. Por otro lado, dada su estructura y metodología es posible comprender las variables que se consideran más importantes para clasificar. 
+
+En los árboles de clasificación se hacen particiones en el espacio de entradas con rectángulos con lados paralelos a los ejes. Las particiones se hacen por medio de reglas de clasificación, a partir de las cuales se busca encontrar un punto de corte el cual indique si continuar por la sub-rama derecha o por la izquierda, con la idea de hacer los nodos sucesivamente más puros, es decir, que separen de la mejor manera a nuestra variable objetivo. En la Figura, se ilustra esta idea a partir de dos variables explicativas $x_{1}$ y $x_{2}$, en donde el punto de cortes es $a$, a partir del cual se clasifica en $a_{1}$ o $a_{2}$.
+
+Estos modelos no siempre resultan ser muy buenos para predecir pero son fáciles de entender y se utilizan como técnica base para otros métodos (bosques aleatorios). Por otra lado, una de sus ventajas es que son modelos robustos para valores atípicos, no es necesario transformar variables y funcionan con datos faltantes en las variables de interés. Una de las mayores desventajas de este modelo es que tiende a sobreajustar la muestra, aún y cuando existen técnicas que disminuyen este sobreajuste. Además, otra desventaja es que por la estructura que utiliza, difícilmente capturan relaciones lineales entre variables y son inestables dado que por la misma construcción pueden variar. 
+
+**Algoritmo Generador**
+
+1. Se inicia con la Construcción del Árbol Maximal con la muestra de entrenamiento, el cual es un proceso recursivo:
+  i. El algoritmo empieza con un nodo raíz que contiene toda la muestra de entrenamiento.
+  ii. Para cada una de las variables explicativas, se decide la mejor forma de separar los valores de la variable objetivo, mediante una regla de partición.
+  iii.  Se divide el nodo en cuestión en dos o más nodos hijos de acuerdo con aquella variable que mejor separa a la variable objetivo, es decir la de mayor grado de impureza.
+  iv. Se repite el proceso con los otros nodos hasta que no sea posible más división.
+  v. Por último, se elige un criterio de parada para saber cuando un nodo se declara como terminal. Estos nodos terminales son llamados hojas, los cuales contienen información sobre el número de observaciones que caen en él y la proporción para cada clase.
+2. Poda del Árbol Maximal utilizando la muestra de validación.
+
+**Reglas de Particion**
+
+Las particiones de los nodos se hacen de tal manera que se reduzca la impureza del árbol, es decir, obtener mayor homogeneidad. En cada nodo se busca reducir la impureza de los nodos que le siguen, de tal forma que las hojas/regiones contengan la mayor homogeneidad posible. Las reglas de partición, dependen exclusivamente de los atributos $X = (X^{1}, X^{2},...,X^{p})$ los cuales pueden ser tanto cuantitativos (de escala de valor y usualmente continuos) como cualitativos. Para el caso de los atributos cualitativos las reglas son de la forma: 
+$$\{X^{j}\in C\} \text{ con } C \subset\{1,...,H\}$$
+Para cada atributo cualitativo, el número de posibles reglas es:
+$$\frac{2^{H}-2}{2} = 2^{H-1} - 1$$
+Mientras que para los atributos cuantitativos la regla se escribe de la siguiente manera:
+$$\{X^{j} \leq c\} \cup \{X^{j} > c\} \text{ con } c \in \mathbb{R}$$
+
+Asimismo, las posibles reglas serán infinitas, lo que se hace en CART es ordenar los valores que toma cada atributo $X^{j}$ dentro de la muestra de entrenamiento y acotar el problema considerando sólo las reglas en las que $c$ sea un valor intermedio entre cada par de valores consecutivos. Siguiendo ese procedimiento, el número de reglas es a lo más *n-1*, donde *n* es el número de observaciones de la muestra de entrenamiento. De esta manera, para ambos casos se tiene que el número de posibles reglas es finito. 
+
+**Medidas de Impureza**
+
+Las medidas de impureza son funciones que sirven para determinar la elección de la regla de partición sobre todas las posibles opciones, de tal manera que se tenga una mayor homogeneidad (de la variable objetivo) en cada sub-rama. Esta medida de impureza es una función $\phi$ definida sobre un conjunto $(p_{1},...,p_{k}) \in \mathbb{R}$ de tal manera que: 
+$$p_{j} \geq 0 \forall j=1,...k \text{  }\text{ y  }\text{  }$$
+$$\sum_{i=1}^k p_{j} = 1$$
+
+Además la función $\phi$ debe cumplir las siguientes propiedades:
+
+* $\phi$ tiene un único máximo en $(\frac{1}{k},...,\frac{1}{k})$
+* $\phi$ alcanza su mínimo en cero unicamente en los puntos de la forma:  
+(1,0,...,0),(0,1,...,0),...,(0,0,...,1)
+* $\phi$ es una función simétrica de $(p_{1},...,p_{k})$
+
+Dada una función de impureza $\phi$, se puede definir la impureza para un nodo $t$ que pertenece a un árbol $T$ de la siguiente manera:
+$$i(t) = \phi(p_{1}(t),...,p_{k}(t))$$
+donde $p_{j}(t)$ es la probabilidad condicional de que un elemento pertenezca a la clase $j$, dado que pertenece al nodo $t$, lo cual se estima como la proporción de elementos que caen dentro de cada clase. De este modo, la mínima impureza se obtiene cuando en un nodo $t$ sólo hay elementos de una clase.
+
+Para los árboles de clasificación, que tratan con variables objetivo categóricas algunas medidas de impureza son:
+
+1. **Entropía**: es una medida utilizada en teoría de la información para medir la cantidad de información almacenada en un número de bits. En este caso una población con menor impureza tendrá un valor de entropía de 0.
+$$i_{ent}(t) = \phi(p_{1}(t),...,p_{k}(t)) = - \sum_{j=1}^k p_{j}(t)logp_{j}(t), \text{  definiendo } 0 log 0 = 0$$
+2. **Índice de Gini**: esta medida es utilizada en ciencias sociales y economía; se refiere a la probabilidad de que dos cosas elegidas al azar de una población sea la misma. Una población con menor impureza tendrá un índice de Gini de 0.
+$$i_{Gini}(t) = \phi(p_{1}(t),...,p_{k}(t)) = 1 - \sum_{j=1}^k [p_{j}(t)]^{2}$$
+Cuando se clasifican datos sólo en dos clases no existe mucha diferencia en los resultados entre el índice Gini y Entropía, pero cuando son más clases sí. La medida de entropía normalmente tiene preferencia por grupos más pequeños y puros, mientras que el índice Gini prefiere grupos similares en tamaño.
+3. **Error de Clasificación**:
+$$i_{err}(t) = \phi(p_{1}(t),...,p_{k}(t)) = 1 - max_{j} p_{j}(t)$$
+4. **Prueba Ji-Cuadrada**: Es una prueba importante en estadística para medir la probabilidad de que la frecuencia observada de una muestra sea debida sólo a la variación de la muestra, es relativa a la proporción en la población original (del nodo padre), si los nodos hijos tienen la misma proporción que sus hijos, entonces el valor ji-cuadrado será cercano a cero, mientras que si sus hijos tienen menor impureza entonces el valor ji-cuadrado será alto.
+
+Después de elegir una regla de partición en la cual se divide un nodo $t$ en dos hijos $t_{1}$ y $t_{2}$, se define una medida de bondad para dicha partición, que en este caso llamaremos $s$, de la siguiente manera:
+$$\Delta i(s,t) = i(t) - p_{i1}(t_{1}) - p_{i2}(t_{2}) \geq 0$$
+En donde $p_{i1}(t_{1}) y p_{i2}(t_{2})$ se refieren a la proporción de elementos del nodo $t$ que caen en el nodo $t_{1} y t_{2}$ correspondientes. En esta medida, es posible notar que el aumento de la bondad depende de la disminución de la impureza en los nodos hijos con relación al nodo inicial. El criterio para seleccionar la mejor partición  $s^{*}$ en el nodo $t$ consiste en elegir aquella que proporciona la mayor bondad, es decir aquella que máximiza:
+$$\Delta i (s^{*},t) = max_{s}\{\Delta i (s,t)\}$$
+Donde $s$ $\in \psi$ que es el conjunto de todas las particiones posibles del nodo $t$.
+
+**Criterio de Parada**
+
+**Asignación de Clases**
+
+Una vez construido el árbol maximal ${T}$ y y los nodos terminales/hojas, el modelo le asigna a cada hoja una clase determinada. Para el caso de variables categóricas usualmente es por medio del voto mayoritario o la clase más frecuente, de esta manera, se le asigna a los elementos que caen en el nodo $t$ la clase $j^{*}$ si:
+$$p_{j^{*}}(t) = max_{i=1,..,k}p_{i}(t)$$
+El valor $p_{j^{*}}(t)$ nos da el "score" dentro de cada nodo terminal, el cual es la proporción real de casos $j^{*}$ en el nodo $t$. En los casos en donde dos clases estén empatadas en probabilidades, entonces se realiza un sorteo. 
+
+<!----------------------------------------------------------------------------------------->
+#### Bosques Aleatorios
+
+El Bosque Aleatorios pertenece a los modelos de aprendizaje estadístico y surge con la idea de mejorar el desempeño de los árboles de decisión. Estos modelos surgen a partir de la idea de ensambles de modelos. 
+
+La idea general del modelo es crear distintas sub-muestras de la muestra de entrenamiento, generando árboles de clasificación con cada una y al final promediar las distintas replicaciones. De esta manera el modelo se hace más robusto que un árbol de clasificación y la varianza en los estimadores se reduce. 
+
+<!----------------------------------------------------------------------------------------->
+## Información Geo-espacial: Métodos y Proyecciones
+
+Los modelos que se utilizan en esta tesis utilizan información geo-espacial, la cual se refiere a información que contiene, además de su valor, su ubicación usualmente representada con coordenadas geográficas. Este tipo de información puede venir representada de diferentes formas dependiendo el fenómeno, por ejemplo, puede venir representado como puntos (ej. las localidades rurales), en líneas (ej. lineas de comuniciación) o como  polígonos (ej. municipios, ageb). 
+
+Una de las formas más comunes de utilizar la ubicación de los datos es por medio de las coordenadas geodesicas: latitud y longitud. Para cualquier punto en la superficie de la Tierra se puede trazar una línea recta que conecta a dicho punto con el centro de la Tierra. De esta manera la latitud del punto es el ángulo que se forma con dicha línea en la dirección norte-sur con el ecuador; mientras que la longitud es el ángulo que se forma entre dicha línea en la dirección este-oeste, con relación a un punto de partida arbitrario (generalmente el Observatorio Real en Greenwich, Inglaterra). Además, por convención los valores positivos de la latitud se encuentran en el hemisferio norte, mientras que los valores negativos en la hemisferio sur. De manera similar, los valores positivos de la longitud se encuentran al este del meridiano de Greenwich, mientras que los valores negativos al oeste. 
+
+El proyectar significa crear un plano a partir de la forma tridimensional de la Tierra, a través de una transformación matemática que busca modificar de menor manera la forma tridimensional. El matemático Carl Gausse probó que es imposible no introducir algún tipo de distorsión al generar la proyección. Existen diferentes tipos de proyecciones:
+
+* Proyecciones Cilíndricas: Se utiliza un cilindro tangente que envuelve a la superficie de la Tierra.
+* Proyecciones Cónicas: En donde se proyecta la superficie de la Tierra a  un cono. 
+* Proyecciones Azimutales: donde se proyecta la superficie de la Tierra a una superficie plana. Estas proyecciones estan centradas alrededor de un solo punto y no muestran la superficie completa de la Tierra.
+
+El sistema de coordenadas proyectado que se utiliza en el presente estudio es el universal transversal de Mercator (UTM), basado en la proyección cartográfica transervsa de Mercador el cual divide la superficie de la Tierra en 60 zonas secantes al meridiano. Cada zona utiliza una proyección distinta para minimizar los errores de proyección. Dentro de cada zona, las coordenadas se miden como la distancia en metros al origen de la zona, la cual es la intersección del ecuador y el centro meridiano para cada zona. La ventaja de utilizar este sistema de coordenadas se debe a la facilidad de realizar cálculos y medir distancias. Sin embargo, este sistema de coordenadas sólo es útil para áreas pequeñas que caigan dentro de una misma zona de UTM, que es el caso de nuestra área de estudio: Chihuahua. 
+
+### Métodos Espaciales
+Para poder manipular la información geo-espacial a partir de la ubicación se necesitan conocer distintos métodos.
+
+La distancia entre dos puntos puede medirse de distintas formas:
+
+* Distancia de coordenadas geodésicas: se utiliza la distancia del gran círculo, la cual es la longitud del semicírculo formado entre dos puntos de la superficie de la Tierra. Asumiendo que la Tierra es esférica se utiliza la fórmula de Haversine: 
+$$haversin\left(\frac{d}{r}\right) = haversin(\phi_{2} - \phi_{1}) + cos(\phi_{1})cos(\phi_{2})haversin(\lambda_{2} - \lambda_{1})$$
+Donde:  
+    - r: es el radio de la Tierra
+    - d: es la distancia euclidiana entre dos puntos
+    - $\phi_{1} y \phi_{2}$: son la latitud de cada punto respectivamente.
+    - $\lambda_{1} y \lambda_{2}$: son la longitud de cada puntos respectivamente
+    -${haversin(\theta) = sen^{2}(\theta/2) = (1 - cos(\theta))/2}$
+
+* Distancia de Coordenadas Proyectadas: Esta se calcula por medio de la distancia euclidiana.

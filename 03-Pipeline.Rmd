@@ -20,3 +20,51 @@ mapas -> mapas predichos
 Modelos: bla bla bla
 (utilize estos hiperparámetros)
 ensmable- percepton (ese objeto enorme es mi modelo)- mezclas los tres modelos y eleccion por votacion
+
+## Datos
+
+### Variables utilizadas
+El presente estudio busca predecir la expansión de la zona urbana de la ciudad de Chihuahua, por lo que en primera instancia se asume que este cambio está asociado con características geográficas y sociodemográficasde cada área de observación y las vecindades que la rodean. De esta manera se recopila información acerca de las variables que se asumieron de mayor relevancia para explicar este fenómeno, las cuales se muestran en los Cuadros ~\ref{tab:variables_censo} y ~\ref{tab:variables_calculadas}.  Estas variables son consideradas geo-espaciales, puesto que contienen, en adición a su atributo su localización. 
+
+\begin{table}[!ht]
+    \centering
+     \caption{Variables Socioeconómicas del Censo de Población y Vivienda}\label{tab:variables_censo}
+        \begin{tabular}{p{4cm}|p{6cm}}\hline
+       \textbf{Variable} & \textbf{Descripción} \\
+        \hline
+        POBTOT & Población total \\
+        PSINDER & Población sin derechohabientes de servicio de salud\\
+        P15Y\_SE & Población mayor a 15 años sin educación\\
+        TVIVHAB & Total de viviendas habitadas \\
+        PROM\_OCUP & Promedio de ocupantes por vivienda\\
+        VPH\_SNBIEN & Viviendas sin bienes\\
+        \hline
+        \end{tabular}
+        \caption*{\small Fuente: Elaboración propia con datos del INEGI, 2016}
+\end{table}
+
+\begin{table}[!h]
+    \centering
+     \caption{Variables Geo-Espaciales Calculadas}\label{tab:variables_calculadas}
+        \begin{tabular}{p{2cm}|p{5.5cm}|p{4cm}}\hline
+       \textbf{Variable} & \textbf{Descripción} & 			\textbf{Fuente}\\
+        \hline
+        Dist\_car & Distancia a carreteras principales (m) & INEGI 1993 \\
+        Pendiente & Porcentaje de Pendiente (\%) & INEGI\\
+        Dist\_ZU & Distancia a Zona Urbana (m) & Calculada con información de INEGI\\
+        Centro & Distancia al centro urbano & Google Earth 2015 \\
+        DENUEg & Distancia a las unidades económicas con más de 250 empleados & INEGI: Directorio Estadístico Nacional de Unidades Económicas\\
+        DENUEm & Distancia a las unidades económicas que emplean entre 50 y 250 personas & INEGI: Directorio Estadístico Nacional de Unidades Económicas\\
+        \hline
+        \end{tabular}
+        \caption*{\small Fuente: Elaboración propia, 2016}
+\end{table}
+
+Con el fin de poder medir las causas de expansión urbana, se define en este trabajo la  variable de interés (a predecir)  como un cambio en el uso de suelo de no-urbano a urbano, en un periodo de tiempo determinado. Además se proponen las variables mostradas los Cuadros ~\ref{tab:variables_censo} y ~\ref{tab:variables_calculadas} como variables que ayudan a determinar si hay un cambio de no-urbano a urbano.
+
+
+\section{Construcción Base de Datos}
+
+Debido a la naturaleza de la información de las variables se optó por utilizar un enfoque estadístico de cuadrícula para acomodar la información. 
+
+En el se propone crear una malla cuadriculada de polígonos que cubran toda el área de influencia del modelo, en este caso la zona metropolitana de Chihuahua. De esta forma se organiza la información relevante obtenida a través de distintas fuentes dentro de la malla de tal manera que cada cuadrícula posee la información asociada a ese pedazo de área. Además  a cada cuadrícula se le asigna una variable que indica si pertenece o no a la mancha urbana representada por los ageb.
