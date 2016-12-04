@@ -1,0 +1,7 @@
+db:
+  dialect: 'postgresql'
+  host: 'host.database.com'
+  user: 'username'
+  password: 'password'
+  database: 'database_name'
+  port: 5432 
