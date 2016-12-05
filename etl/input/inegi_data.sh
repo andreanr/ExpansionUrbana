@@ -12,8 +12,8 @@ EXTRACTED_FOLDER=$ROOT_FOLDER'/input/extracted'
 
 ####################### AGEBS ##########################
 # 2015
-#unzip $ZIP_FOLDER/702825217341_s.zip -d $EXTRACTED_FOLDER
-#shp2pgsql -s 4326 -d -D -I $EXTRACTED_FOLDER"/conjunto_de_datos/areas_geoestadisticas_basicas.shp" raw.ageb_2015 | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
+unzip $ZIP_FOLDER/702825217341_s.zip -d $EXTRACTED_FOLDER
+shp2pgsql -s 4326 -d -D -I $EXTRACTED_FOLDER"/conjunto_de_datos/areas_geoestadisticas_basicas.shp" raw.ageb_2015 | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
 
 ## 2010
 yes | unzip $ZIP_FOLDER/702825292812_s.zip -d $EXTRACTED_FOLDER
@@ -45,22 +45,28 @@ raster2pgsql -d -I -C -M -F -t 100x100 -s 32613 -t 100x100 $EXTRACTED_FOLDER"/Ch
 
 ###################### ITER ########################### 
 # 2010
-yes | unzip $ZIP_FOLDER/iter_nalcsv10.zip -d $EXTRACTED_FOLDER
+unzip $ZIP_FOLDER/iter_08xls10.zip -d $EXTRACTED_FOLDER
+in2csv $EXTRACTED_FOLDER'/ITER_08XLS10.xls' >> $EXTRACTED_FOLDER'/ITER_08XLS10.csv'
+cat $EXTRACTED_FOLDER"/ITER_08XLS10.csv" | dos2unix |tr [:upper:] [:lower:] | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.iter_2010 | tr -d "\"" >> $EXTRACTED_FOLDER"/iter2010.sql"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.iter_2010;"
-head -n 100 $EXTRACTED_FOLDER'/iter_00_cpv2010/conjunto_de_datos/iter_00_cpv2010.csv' | dos2unix | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.iter_2010 | tr -d "\"" >> $EXTRACTED_FOLDER"/iter2010.sql"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_FOLDER"/iter2010.sql"
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "COPY raw.iter_2010 FROM '$EXTRACTED_FOLDER/iter_00_cpv2010/conjunto_de_datos/iter_00_cpv2010.csv' DELIMITER ','  CSV header;"
-
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.iter_2010 from '$EXTRACTED_FOLDER/ITER_08XLS10.csv' DELIMITER ',' CSV header;"
+#
 ### 2005
-yes | unzip $ZIP_FOLDER/iter_naltxt05.zip -d $EXTRACTED_FOLDER
-#head -n 100 $EXTRACTED_FOLDER"/ITER_NALTXT05.txt" | dos2unix | csvsql --tabs -e latin1 -i "postgresql" --no-constraints --tables raw.iter_2005 | tr -d "\"" >> $EXTRACTED_FOLDER"/iter2005.sql"
-#psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.iter_2005;"
-#psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_FOLDER"/iter2005.sql"
-#psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "\copy raw.iter_2005 from $EXTRACTED_FOLDER'/ITER_NALTXT05.txt' with csv header;"
+unzip $ZIP_FOLDER/iter_08xls05.zip -d $EXTRACTED_FOLDER
+in2csv $EXTRACTED_FOLDER'/ITER_08XLS05.xls' >> $EXTRACTED_FOLDER'/ITER_08XLS05.csv'
+cat $EXTRACTED_FOLDER"/ITER_08XLS05.csv" | dos2unix | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.iter_2005 | tr -d "\"" >> $EXTRACTED_FOLDER"/iter2005.sql"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.iter_2005;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_FOLDER"/iter2005.sql"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.iter_2005 from '$EXTRACTED_FOLDER/ITER_08XLS05.csv' DELIMITER ',' CSV header;"
 #
 # 2000
-#yes | unzip $ZIP_FOLDER/iter_naltxt00.zip -d $EXTRACTED_FOLDER
-#csvsql --tabs -e latin1 --db postgresql://@$DB_HOST:$DB_PORT/$DB_NAME --insert EXTRACTED_FOLDER/ITER_NALTXT00.txt --db-schema raw --table iter_2000 | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
+unzip $ZIP_FOLDER/iter_08xls00.zip -d $EXTRACTED_FOLDER
+in2csv $EXTRACTED_FOLDER'/ITER_08XLS00.xls' >> $EXTRACTED_FOLDER'/ITER_08XLS00.csv'
+cat $EXTRACTED_FOLDER"/ITER_08XLS00.csv" | dos2unix | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.iter_2000 | tr -d "\"" >>$EXTRACTED_FOLDER"/iter2000.sql"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.iter_2000;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_FOLDER"/iter2000.sql"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.iter_2000 from '$EXTRACTED_FOLDER/ITER_08XLS00.csv' DELIMITER ',' CSV header;"
 
 ###################### DENUE ##########################
 unzip $ZIP_FOLDER/denue_08_shp.zip -d $EXTRACTED_FOLDER
