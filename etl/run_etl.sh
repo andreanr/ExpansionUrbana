@@ -21,7 +21,12 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA ml;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA results;"
 
 echo 'Populating raw data...'
-sh input/inegi_data.sh
+#psql -h $DB_HOST -U $DB_USER -d $DB_NAME < 'add_spatial_ref.sql'
+sh input/ageb_shapefiles/import_ageb_shapefiles.sh
+sh input/census/import_census.sh
+sh input/denue/import_denue.sh
+sh input/geography/import_geography.sh
+sh input/transportation/import_transportation.sh
 
 echo 'Creating buffer and grid...'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "utils.sql"
