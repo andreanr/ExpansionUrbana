@@ -7,6 +7,8 @@ _book/
 config.yaml
 etl/input/inegi
 data/
+extracted_data/
+raw_data/
 *.zip
 *.shp
 *.csv
