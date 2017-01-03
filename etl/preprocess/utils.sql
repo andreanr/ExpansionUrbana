@@ -1,4 +1,37 @@
 -------------------------------------------------------------------------------------------------
+---------------------- FUNCTION THAT CHECKS IF A KEY IN A JSON EXISTS ---------------------------
+-------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION key_exists(some_json json, outer_key text)
+RETURNS boolean AS
+$$
+BEGIN
+	    RETURN (some_json->outer_key) IS NOT NULL;
+END;
+$$
+LANGUAGE plpgsql;
+
+-------------------------------------------------------------------------------------------------
+--------------------- FUNCTION THAT REPLACES COLUMN NAMES FROM A JSON ---------------------------
+-------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION  replace_cols_from_json(cnames json, tname text, sname text) returns void as
+$$
+DECLARE
+    cname text;
+BEGIN
+	for cname in select column_name from information_schema.columns
+		where table_name = tname and table_schema = sname
+	LOOP
+		if key_exists(cnames::json, cname) then
+			if cnames->>cname != cname then
+				execute format('alter table %s.%I rename %I to %I', 
+					sname, tname, cname, cnames->>cname);
+			END if;
+		END if;
+	END LOOP;
+END;
+$$ language plpgsql;
+
+-------------------------------------------------------------------------------------------------
 ----------------------------- Function to generate grid -----------------------------------------
 -------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.makegrid_2d (
