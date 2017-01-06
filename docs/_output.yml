@@ -2,6 +2,6 @@ bookdown::gitbook:
   css: style.css
 bookdown::pdf_book:
   includes:
-    in_header: preamble.tex
+    in_header: latex/preamble.tex
   latex_engine: xelatex
   pandoc_args: --chapters
