@@ -20,7 +20,7 @@ cat $EXTRACTED_DATA_FOLDER'/censo_urbano_2000.csv' | dos2unix |tr [:upper:] [:lo
 rm $EXTRACTED_DATA_FOLDER/tmp.csv
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.censo_urbano_2000;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_DATA_FOLDER'/censo2000.sql'
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2000 from '$EXTRACTED_DATA_FOLDER/censo_urbano_2000.csv' DELIMITER ',' CSV header;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2000 from '$EXTRACTED_DATA_FOLDER/censo_urbano_2000.csv' WITH DELIMITER as ','  NULL AS '*' csv header  ;"
 
 # 2005
 yes | unzip $RAW_DATA_FOLDER'/censo_urbano_2005.zip' -d $EXTRACTED_DATA_FOLDER
@@ -29,14 +29,14 @@ cat $EXTRACTED_DATA_FOLDER/tmp.csv | dos2unix | sed 's/^M//g' > $EXTRACTED_DATA_
 cat $EXTRACTED_DATA_FOLDER'/censo_urbano_2005.csv' | dos2unix |tr [:upper:] [:lower:] | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.censo_urbano_2005 | tr -d "\"" > $EXTRACTED_DATA_FOLDER'/censo2005.sql'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.censo_urbano_2005;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_DATA_FOLDER'/censo2005.sql'
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2005 from '$EXTRACTED_DATA_FOLDER/censo_urbano_2005.csv'  DELIMITER ',' CSV header;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2005 from '$EXTRACTED_DATA_FOLDER/censo_urbano_2005.csv' WITH DELIMITER as ','  NULL AS '*' csv header ;"
 
 # 2010
 yes | unzip $RAW_DATA_FOLDER'/RESAGEBURB_08csv10.zip' -d $EXTRACTED_DATA_FOLDER
 cat $EXTRACTED_DATA_FOLDER'/resultados_ageb_urbana_08_cpv2010/conjunto_de_datos/resultados_ageb_urbana_08_cpv2010.csv' | dos2unix |tr [:upper:] [:lower:] | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.censo_urbano_2010 | tr -d "\"" > $EXTRACTED_DATA_FOLDER'/censo2010.sql'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Drop table if exists raw.censo_urbano_2010;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < $EXTRACTED_DATA_FOLDER'/censo2010.sql'
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2010 from '$EXTRACTED_DATA_FOLDER/resultados_ageb_urbana_08_cpv2010/conjunto_de_datos/resultados_ageb_urbana_08_cpv2010.csv' DELIMITER ',' CSV header;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "Copy raw.censo_urbano_2010 from '$EXTRACTED_DATA_FOLDER/resultados_ageb_urbana_08_cpv2010/conjunto_de_datos/resultados_ageb_urbana_08_cpv2010.csv' WITH DELIMITER as ','  NULL AS '*' csv header  ;"
 #
 ####################### ITER ###########################
 ## 2010

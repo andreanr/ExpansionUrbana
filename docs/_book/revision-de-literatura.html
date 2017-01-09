@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Comparacion de Modelos de Expansion Urbana</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="Comparacion de Modelos de Expansion Urbana">
+  <meta name="generator" content="bookdown 0.1 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Comparacion de Modelos de Expansion Urbana" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Comparacion de Modelos de Expansion Urbana" />
+  
+  
+  
+
+<meta name="author" content="Andrea Navarrete">
+
+<meta name="date" content="2016-11-23">
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introduccion.html">
+<link rel="next" href="pipeline.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduccion.html"><a href="introduccion.html"><i class="fa fa-check"></i><b>1</b> Introduccion</a></li>
+<li class="chapter" data-level="2" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html"><i class="fa fa-check"></i><b>2</b> Revision de Literatura</a><ul>
+<li class="chapter" data-level="2.1" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html#expansion-urbana"><i class="fa fa-check"></i><b>2.1</b> Expansión Urbana</a></li>
+<li class="chapter" data-level="2.2" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html#modelos-de-prediccion"><i class="fa fa-check"></i><b>2.2</b> Modelos de Predicción</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html#modelos-supervisados"><i class="fa fa-check"></i><b>2.2.1</b> Modelos supervisados</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html#informacion-geo-espacial-metodos-y-proyecciones"><i class="fa fa-check"></i><b>2.3</b> Información Geo-espacial: Métodos y Proyecciones</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="revision-de-literatura.html"><a href="revision-de-literatura.html#metodos-espaciales"><i class="fa fa-check"></i><b>2.3.1</b> Métodos Espaciales</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="pipeline.html"><a href="pipeline.html"><i class="fa fa-check"></i><b>3</b> Pipeline</a><ul>
+<li class="chapter" data-level="3.1" data-path="pipeline.html"><a href="pipeline.html#datos"><i class="fa fa-check"></i><b>3.1</b> Datos</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="pipeline.html"><a href="pipeline.html#variables-utilizadas"><i class="fa fa-check"></i><b>3.1.1</b> Variables utilizadas</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="pipeline.html"><a href="pipeline.html#construccion-de-las-observaciones-y-el-area-de-influencia"><i class="fa fa-check"></i><b>3.2</b> Construcción de las observaciones y el área de influencia:</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="resultados.html"><a href="resultados.html"><i class="fa fa-check"></i><b>4</b> Resultados</a></li>
+<li class="chapter" data-level="5" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>5</b> Conclusiones</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Comparacion de Modelos de Expansion Urbana</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="revision-de-literatura" class="section level1">
+<h1><span class="header-section-number">2</span> Revision de Literatura</h1>
+<p>Revision teorica - supervisado - cientifico de datos - espacial</p>
+<div id="expansion-urbana" class="section level2">
+<h2><span class="header-section-number">2.1</span> Expansión Urbana</h2>
+<p>La expansión de las ciudades es un fenómeno que ha ocurrido desde siempre, en ocasiones de forma desordenada, generando diversos problemas por lo que la planeación urbana cada vez requiere mayor atención. En México actualmente existen 59 zonas metropolitanas las cuales concentran el 56.8% de la población nacional (SEDESOL). Por otra parte, el crecimiento de la mancha urbana ha estado creciendo a una tasa por encima del incremento poblacional. Este crecimiento ha generado problemas de equidad, de crecimiento económico y deterioro ambiental. Debido a ello, es importante la planeación de los espacios urbanos y servicios con el fin de poder proporcionar a las personas una buena calidad de vida y construir ciudades más sustentables.</p>
+<p>Se estima que entre 2010 y 2050 los países en desarrollo, México incluido entre ellos, incrementaran su población urbana en 2.6 billones de personas, a una tasa de 2.4% al año (United Nations Population Division 2012, file 3). Esto implica que se requerirá generar lugares residenciales para estas personas dentro de la periferia urbana para abastecer el crecimiento de la demanda de tierra para casas. A pesar de que las zonas urbanas cubran una pequeña fracción de la tierra, su expansión ha alterado de manera significativa el paisaje natural creando grande impactos en el medio ambiente y el ecosistema.</p>
+<p>En México se estima que el 63% de la población vive en áreas urbanas y que casi la mitad se concentra en la región centro del país (Eibenshutz). El crecimiento de las áreas urbanas ha ido aumentando a una tasa por encima del incremento poblacional. Este crecimiento ha rebasado la capacidad de los tres órganos de gobierno para planear y controlar las necesidades sociales lo que ha generado problemas de equidad, ambientales y económicos. Debido a ello, es importante la planeación de servicios y espacios urbanos con el fin de poder proporcionar a las personas una buena calidad de vida y construir ciudades más sustentables. Por ejemplo, la modelación del crecimiento urbano puede crear escenarios para adaptación y mitigación enfrentando los problemas relacionados a cada ciudad.</p>
+</div>
+<div id="modelos-de-prediccion" class="section level2">
+<h2><span class="header-section-number">2.2</span> Modelos de Predicción</h2>
+<p>Modelos supervisados y no supervisados</p>
+<div id="modelos-supervisados" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Modelos supervisados</h3>
+<p>En los modelos de predicción se busca encontrar la relación existente entre las variables explicativas <span class="math inline">\(X=(X^1, X^2, ..., X^p)\)</span> y la variable de interés (<span class="math inline">\(y\)</span>), a través de un modelo probabilístico <span class="math inline">\(P(X,y)\)</span>. Esto se realiza con la finalidad de poder explicar la relación que existe entre las variables, así como para predecir futuros valores de la variable de interés, dado valores conocidos a las variables explicativas. Una forma de entenderlo, es pensar que la información generada por medio de una caja por la cual las variables explicativas <span class="math inline">\(X\)</span> entran y por el otro lado, la variable de interés sale. Adentro de la caja hay funciones o algoritmos que relacionan las variables explicativas con la variable de interés. Esta idea es ilustrada en la Figura.</p>
+<p>Existen muchos modelos de predicción, los cuales utilizan distintas funciones para capturar la relación entre las variables. Dependerá de los datos y de la información que se conozca <em>a priori</em> para la elección de dicho modelo. A continuación se describen los modelos de predicción que se utilizarán y compararán.</p>
+<p>Al realizar los modelos predictivos, se tomararán tres conjuntos de datos:</p>
+<ul>
+<li>Muestra de Entrenamiento: en este caso son los datos de 2000 <span class="math inline">\((t_{1})\)</span> para predecir la mancha urbana de 2005 <span class="math inline">\((t_2)\)</span>. Estos datos son los que se utilizan para entrenar los modelos. <span class="math display">\[t_{1} \rightarrow t_{2}\]</span></li>
+<li>Muestra de Validación: en este caso se utilizan los datos de 2005 <span class="math inline">\((t_{2})\)</span> para predecir la mancha urbana de 2010 <span class="math inline">\((t_{3})\)</span>.Con esta muestra es posible comparar el desempeño de los diferentes modelos. Estos mismo datos nos darán el error real cometido con cada modelo. Esta comparación se realiza analizando qué tanto se ajustan los valores predichos a los reales. <span class="math display">\[ t_{2} \rightarrow t_{3} \]</span></li>
+<li>Muestra de Predicción: son los datos que se utilizan para predecir 2015 <span class="math inline">\((t_{4})\)</span>. <span class="math display">\[ t_{3} \rightarrow t_{4} \]</span></li>
+</ul>
+<!----------------------------------------------------------------------------------------->
+<div id="regresion-logistica" class="section level4">
+<h4><span class="header-section-number">2.2.1.1</span> Regresión Logística</h4>
+<p>El modelo de regresión logística es un modelo paramétrico de regresión que se utiliza para predecir el resultado de una variable binaria la cual toma valor de 1 si ocurre el suceso y valor de 0 si no ocurre. En este caso el suceso se referirá al hecho de que la observación pertenezca a la mancha urbana o no.</p>
+<p>Este modelo surge a través de querer modelar las probabilidades a través de funciones lineales en <span class="math inline">\(x\)</span> y <span class="math inline">\(y\)</span>, al mismo tiempo de asegurarse que la suma de estas probabilidades sume uno y pertenezca al rango [0,1].Establece la siguiente relación entre la probabilidad de que ocurra el suceso a partir de un área de observación que toma ciertos valores conocidos <em>(<span class="math inline">\(x_{i}\)</span>’s)</em>:</p>
+<p><span class="math display">\[P(y=1|x_{1},x_{2},...,x_{p}) = \frac{e^{\beta_{0}+\beta_{1}x_{1}+ \beta_{2}x_{2}+...+\beta_{p}x_{p}}}{1+e^{\beta_{0}+\beta_{1}x_{1}+ \beta_{2}x_{2}+...+\beta_{p}x_{p}}}\]</span></p>
+<p>Realizando una transformación monotónica logística: <span class="math inline">\(log[p/(1-p)]\)</span>, de esta forma tenemo una relación lineal:</p>
+<p><span class="math display">\[log\frac{P(y=0|X=x)}{P(y=1|X=x)} = \beta_{0} + \beta^{T}x\]</span></p>
+<p>Derivado de esta relación, se estiman los parámetros {<span class="math inline">\(\beta_{0},\beta_{1},...,\beta_{p}\)</span>} por medio del método de máxima verosimilitud, donde se maximiza el logaritmo de la función de verosimilitud:</p>
+<p><span class="math display">\[max_{\beta}L(y,\beta) = \sum_{k=1}^n y_{i}ln(p_{i}) + (1 - y_{i})ln(1 - p_{i})\]</span></p>
+<p>Donde <em>n</em> es el número de observaciones y <span class="math inline">\(p_{i} = P(y=1|x_{1},x_{2},...,x_{p})\)</span> son las probabilidades condicionales.</p>
+<p>Por lo tanto, para cada observación se tendrá una probabilidad estimada de que ocurra el suceso de interés, en este caso si el área de observación pertenece a la mancha urbana o no.</p>
+<!----------------------------------------------------------------------------------------->
+</div>
+<div id="arboles-de-clasificacion" class="section level4">
+<h4><span class="header-section-number">2.2.1.2</span> Árboles de Clasificación</h4>
+<p>Un árbol de clasificación es un modelo de predicción no paramétrico de aprendizaje estadístico. El método genera reglas de clasificación representadas en forma de una estructura de árbol como se muestra en la Figura. Se utilizan principalmente para hacer clasificaciones y predicciones, además asignan probabilidades, de acuerdo a la hoja a la que fueron clasificados los datos. Por otro lado, dada su estructura y metodología es posible comprender las variables que se consideran más importantes para clasificar.</p>
+<p>En los árboles de clasificación se hacen particiones en el espacio de entradas con rectángulos con lados paralelos a los ejes. Las particiones se hacen por medio de reglas de clasificación, a partir de las cuales se busca encontrar un punto de corte el cual indique si continuar por la sub-rama derecha o por la izquierda, con la idea de hacer los nodos sucesivamente más puros, es decir, que separen de la mejor manera a nuestra variable objetivo. En la Figura, se ilustra esta idea a partir de dos variables explicativas <span class="math inline">\(x_{1}\)</span> y <span class="math inline">\(x_{2}\)</span>, en donde el punto de cortes es <span class="math inline">\(a\)</span>, a partir del cual se clasifica en <span class="math inline">\(a_{1}\)</span> o <span class="math inline">\(a_{2}\)</span>.</p>
+<p>Estos modelos no siempre resultan ser muy buenos para predecir pero son fáciles de entender y se utilizan como técnica base para otros métodos (bosques aleatorios). Por otra lado, una de sus ventajas es que son modelos robustos para valores atípicos, no es necesario transformar variables y funcionan con datos faltantes en las variables de interés. Una de las mayores desventajas de este modelo es que tiende a sobreajustar la muestra, aún y cuando existen técnicas que disminuyen este sobreajuste. Además, otra desventaja es que por la estructura que utiliza, difícilmente capturan relaciones lineales entre variables y son inestables dado que por la misma construcción pueden variar.</p>
+<p><strong>Algoritmo Generador</strong></p>
+<ol style="list-style-type: decimal">
+<li>Se inicia con la Construcción del Árbol Maximal con la muestra de entrenamiento, el cual es un proceso recursivo:</li>
+</ol>
+<ol style="list-style-type: lower-roman">
+<li>El algoritmo empieza con un nodo raíz que contiene toda la muestra de entrenamiento.</li>
+<li>Para cada una de las variables explicativas, se decide la mejor forma de separar los valores de la variable objetivo, mediante una regla de partición.</li>
+<li>Se divide el nodo en cuestión en dos o más nodos hijos de acuerdo con aquella variable que mejor separa a la variable objetivo, es decir la de mayor grado de impureza.</li>
+<li>Se repite el proceso con los otros nodos hasta que no sea posible más división.</li>
+<li>Por último, se elige un criterio de parada para saber cuando un nodo se declara como terminal. Estos nodos terminales son llamados hojas, los cuales contienen información sobre el número de observaciones que caen en él y la proporción para cada clase.</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li>Poda del Árbol Maximal utilizando la muestra de validación.</li>
+</ol>
+<p><strong>Reglas de Particion</strong></p>
+<p>Las particiones de los nodos se hacen de tal manera que se reduzca la impureza del árbol, es decir, obtener mayor homogeneidad. En cada nodo se busca reducir la impureza de los nodos que le siguen, de tal forma que las hojas/regiones contengan la mayor homogeneidad posible. Las reglas de partición, dependen exclusivamente de los atributos <span class="math inline">\(X = (X^{1}, X^{2},...,X^{p})\)</span> los cuales pueden ser tanto cuantitativos (de escala de valor y usualmente continuos) como cualitativos. Para el caso de los atributos cualitativos las reglas son de la forma: <span class="math display">\[\{X^{j}\in C\} \text{ con } C \subset\{1,...,H\}\]</span> Para cada atributo cualitativo, el número de posibles reglas es: <span class="math display">\[\frac{2^{H}-2}{2} = 2^{H-1} - 1\]</span> Mientras que para los atributos cuantitativos la regla se escribe de la siguiente manera: <span class="math display">\[\{X^{j} \leq c\} \cup \{X^{j} &gt; c\} \text{ con } c \in \mathbb{R}\]</span></p>
+<p>Asimismo, las posibles reglas serán infinitas, lo que se hace en CART es ordenar los valores que toma cada atributo <span class="math inline">\(X^{j}\)</span> dentro de la muestra de entrenamiento y acotar el problema considerando sólo las reglas en las que <span class="math inline">\(c\)</span> sea un valor intermedio entre cada par de valores consecutivos. Siguiendo ese procedimiento, el número de reglas es a lo más <em>n-1</em>, donde <em>n</em> es el número de observaciones de la muestra de entrenamiento. De esta manera, para ambos casos se tiene que el número de posibles reglas es finito.</p>
+<p><strong>Medidas de Impureza</strong></p>
+<p>Las medidas de impureza son funciones que sirven para determinar la elección de la regla de partición sobre todas las posibles opciones, de tal manera que se tenga una mayor homogeneidad (de la variable objetivo) en cada sub-rama. Esta medida de impureza es una función <span class="math inline">\(\phi\)</span> definida sobre un conjunto <span class="math inline">\((p_{1},...,p_{k}) \in \mathbb{R}\)</span> de tal manera que: <span class="math display">\[p_{j} \geq 0 \forall j=1,...k \text{  }\text{ y  }\text{  }\]</span> <span class="math display">\[\sum_{i=1}^k p_{j} = 1\]</span></p>
+<p>Además la función <span class="math inline">\(\phi\)</span> debe cumplir las siguientes propiedades:</p>
+<ul>
+<li><span class="math inline">\(\phi\)</span> tiene un único máximo en <span class="math inline">\((\frac{1}{k},...,\frac{1}{k})\)</span></li>
+<li><span class="math inline">\(\phi\)</span> alcanza su mínimo en cero unicamente en los puntos de la forma:<br />
+(1,0,…,0),(0,1,…,0),…,(0,0,…,1)</li>
+<li><span class="math inline">\(\phi\)</span> es una función simétrica de <span class="math inline">\((p_{1},...,p_{k})\)</span></li>
+</ul>
+<p>Dada una función de impureza <span class="math inline">\(\phi\)</span>, se puede definir la impureza para un nodo <span class="math inline">\(t\)</span> que pertenece a un árbol <span class="math inline">\(T\)</span> de la siguiente manera: <span class="math display">\[i(t) = \phi(p_{1}(t),...,p_{k}(t))\]</span> donde <span class="math inline">\(p_{j}(t)\)</span> es la probabilidad condicional de que un elemento pertenezca a la clase <span class="math inline">\(j\)</span>, dado que pertenece al nodo <span class="math inline">\(t\)</span>, lo cual se estima como la proporción de elementos que caen dentro de cada clase. De este modo, la mínima impureza se obtiene cuando en un nodo <span class="math inline">\(t\)</span> sólo hay elementos de una clase.</p>
+<p>Para los árboles de clasificación, que tratan con variables objetivo categóricas algunas medidas de impureza son:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Entropía</strong>: es una medida utilizada en teoría de la información para medir la cantidad de información almacenada en un número de bits. En este caso una población con menor impureza tendrá un valor de entropía de 0. <span class="math display">\[i_{ent}(t) = \phi(p_{1}(t),...,p_{k}(t)) = - \sum_{j=1}^k p_{j}(t)logp_{j}(t), \text{  definiendo } 0 log 0 = 0\]</span></li>
+<li><strong>Índice de Gini</strong>: esta medida es utilizada en ciencias sociales y economía; se refiere a la probabilidad de que dos cosas elegidas al azar de una población sea la misma. Una población con menor impureza tendrá un índice de Gini de 0. <span class="math display">\[i_{Gini}(t) = \phi(p_{1}(t),...,p_{k}(t)) = 1 - \sum_{j=1}^k [p_{j}(t)]^{2}\]</span> Cuando se clasifican datos sólo en dos clases no existe mucha diferencia en los resultados entre el índice Gini y Entropía, pero cuando son más clases sí. La medida de entropía normalmente tiene preferencia por grupos más pequeños y puros, mientras que el índice Gini prefiere grupos similares en tamaño.</li>
+<li><strong>Error de Clasificación</strong>: <span class="math display">\[i_{err}(t) = \phi(p_{1}(t),...,p_{k}(t)) = 1 - max_{j} p_{j}(t)\]</span></li>
+<li><strong>Prueba Ji-Cuadrada</strong>: Es una prueba importante en estadística para medir la probabilidad de que la frecuencia observada de una muestra sea debida sólo a la variación de la muestra, es relativa a la proporción en la población original (del nodo padre), si los nodos hijos tienen la misma proporción que sus hijos, entonces el valor ji-cuadrado será cercano a cero, mientras que si sus hijos tienen menor impureza entonces el valor ji-cuadrado será alto.</li>
+</ol>
+<p>Después de elegir una regla de partición en la cual se divide un nodo <span class="math inline">\(t\)</span> en dos hijos <span class="math inline">\(t_{1}\)</span> y <span class="math inline">\(t_{2}\)</span>, se define una medida de bondad para dicha partición, que en este caso llamaremos <span class="math inline">\(s\)</span>, de la siguiente manera: <span class="math display">\[\Delta i(s,t) = i(t) - p_{i1}(t_{1}) - p_{i2}(t_{2}) \geq 0\]</span> En donde <span class="math inline">\(p_{i1}(t_{1}) y p_{i2}(t_{2})\)</span> se refieren a la proporción de elementos del nodo <span class="math inline">\(t\)</span> que caen en el nodo <span class="math inline">\(t_{1} y t_{2}\)</span> correspondientes. En esta medida, es posible notar que el aumento de la bondad depende de la disminución de la impureza en los nodos hijos con relación al nodo inicial. El criterio para seleccionar la mejor partición <span class="math inline">\(s^{*}\)</span> en el nodo <span class="math inline">\(t\)</span> consiste en elegir aquella que proporciona la mayor bondad, es decir aquella que máximiza: <span class="math display">\[\Delta i (s^{*},t) = max_{s}\{\Delta i (s,t)\}\]</span> Donde <span class="math inline">\(s\)</span> <span class="math inline">\(\in \psi\)</span> que es el conjunto de todas las particiones posibles del nodo <span class="math inline">\(t\)</span>.</p>
+<p><strong>Criterio de Parada</strong></p>
+<p><strong>Asignación de Clases</strong></p>
+<p>Una vez construido el árbol maximal <span class="math inline">\({T}\)</span> y y los nodos terminales/hojas, el modelo le asigna a cada hoja una clase determinada. Para el caso de variables categóricas usualmente es por medio del voto mayoritario o la clase más frecuente, de esta manera, se le asigna a los elementos que caen en el nodo <span class="math inline">\(t\)</span> la clase <span class="math inline">\(j^{*}\)</span> si: <span class="math display">\[p_{j^{*}}(t) = max_{i=1,..,k}p_{i}(t)\]</span> El valor <span class="math inline">\(p_{j^{*}}(t)\)</span> nos da el “score” dentro de cada nodo terminal, el cual es la proporción real de casos <span class="math inline">\(j^{*}\)</span> en el nodo <span class="math inline">\(t\)</span>. En los casos en donde dos clases estén empatadas en probabilidades, entonces se realiza un sorteo.</p>
+<!----------------------------------------------------------------------------------------->
+</div>
+<div id="bosques-aleatorios" class="section level4">
+<h4><span class="header-section-number">2.2.1.3</span> Bosques Aleatorios</h4>
+<p>El Bosque Aleatorios pertenece a los modelos de aprendizaje estadístico y surge con la idea de mejorar el desempeño de los árboles de decisión. Estos modelos surgen a partir de la idea de ensambles de modelos.</p>
+<p>La idea general del modelo es crear distintas sub-muestras de la muestra de entrenamiento, generando árboles de clasificación con cada una y al final promediar las distintas replicaciones. De esta manera el modelo se hace más robusto que un árbol de clasificación y la varianza en los estimadores se reduce.</p>
+<!----------------------------------------------------------------------------------------->
+</div>
+</div>
+</div>
+<div id="informacion-geo-espacial-metodos-y-proyecciones" class="section level2">
+<h2><span class="header-section-number">2.3</span> Información Geo-espacial: Métodos y Proyecciones</h2>
+<p>Los modelos que se utilizan en esta tesis utilizan información geo-espacial, la cual se refiere a información que contiene, además de su valor, su ubicación usualmente representada con coordenadas geográficas. Este tipo de información puede venir representada de diferentes formas dependiendo el fenómeno, por ejemplo, puede venir representado como puntos (ej. las localidades rurales), en líneas (ej. lineas de comuniciación) o como polígonos (ej. municipios, ageb).</p>
+<p>Una de las formas más comunes de utilizar la ubicación de los datos es por medio de las coordenadas geodesicas: latitud y longitud. Para cualquier punto en la superficie de la Tierra se puede trazar una línea recta que conecta a dicho punto con el centro de la Tierra. De esta manera la latitud del punto es el ángulo que se forma con dicha línea en la dirección norte-sur con el ecuador; mientras que la longitud es el ángulo que se forma entre dicha línea en la dirección este-oeste, con relación a un punto de partida arbitrario (generalmente el Observatorio Real en Greenwich, Inglaterra). Además, por convención los valores positivos de la latitud se encuentran en el hemisferio norte, mientras que los valores negativos en la hemisferio sur. De manera similar, los valores positivos de la longitud se encuentran al este del meridiano de Greenwich, mientras que los valores negativos al oeste.</p>
+<p>El proyectar significa crear un plano a partir de la forma tridimensional de la Tierra, a través de una transformación matemática que busca modificar de menor manera la forma tridimensional. El matemático Carl Gausse probó que es imposible no introducir algún tipo de distorsión al generar la proyección. Existen diferentes tipos de proyecciones:</p>
+<ul>
+<li>Proyecciones Cilíndricas: Se utiliza un cilindro tangente que envuelve a la superficie de la Tierra.</li>
+<li>Proyecciones Cónicas: En donde se proyecta la superficie de la Tierra a un cono.</li>
+<li>Proyecciones Azimutales: donde se proyecta la superficie de la Tierra a una superficie plana. Estas proyecciones estan centradas alrededor de un solo punto y no muestran la superficie completa de la Tierra.</li>
+</ul>
+<p>El sistema de coordenadas proyectado que se utiliza en el presente estudio es el universal transversal de Mercator (UTM), basado en la proyección cartográfica transervsa de Mercador el cual divide la superficie de la Tierra en 60 zonas secantes al meridiano. Cada zona utiliza una proyección distinta para minimizar los errores de proyección. Dentro de cada zona, las coordenadas se miden como la distancia en metros al origen de la zona, la cual es la intersección del ecuador y el centro meridiano para cada zona. La ventaja de utilizar este sistema de coordenadas se debe a la facilidad de realizar cálculos y medir distancias. Sin embargo, este sistema de coordenadas sólo es útil para áreas pequeñas que caigan dentro de una misma zona de UTM, que es el caso de nuestra área de estudio: Chihuahua.</p>
+<div id="metodos-espaciales" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Métodos Espaciales</h3>
+<p>Para poder manipular la información geo-espacial a partir de la ubicación se necesitan conocer distintos métodos.</p>
+<p>La distancia entre dos puntos puede medirse de distintas formas:</p>
+<ul>
+<li>Distancia de coordenadas geodésicas: se utiliza la distancia del gran círculo, la cual es la longitud del semicírculo formado entre dos puntos de la superficie de la Tierra. Asumiendo que la Tierra es esférica se utiliza la fórmula de Haversine: <span class="math display">\[haversin\left(\frac{d}{r}\right) = haversin(\phi_{2} - \phi_{1}) + cos(\phi_{1})cos(\phi_{2})haversin(\lambda_{2} - \lambda_{1})\]</span> Donde:
+<ul>
+<li>r: es el radio de la Tierra</li>
+<li>d: es la distancia euclidiana entre dos puntos</li>
+<li><span class="math inline">\(\phi_{1} y \phi_{2}\)</span>: son la latitud de cada punto respectivamente.</li>
+<li><span class="math inline">\(\lambda_{1} y \lambda_{2}\)</span>: son la longitud de cada puntos respectivamente -<span class="math inline">\({haversin(\theta) = sen^{2}(\theta/2) = (1 - cos(\theta))/2}\)</span></li>
+</ul></li>
+<li>Distancia de Coordenadas Proyectadas: Esta se calcula por medio de la distancia euclidiana.</li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduccion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pipeline.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

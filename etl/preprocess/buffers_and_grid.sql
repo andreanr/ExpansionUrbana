@@ -20,8 +20,12 @@ select  st_buffer(st_multi(st_union(geom)),7000) as buffer_geom from preprocess.
 -------------------------------------------------------------------------------------------------
 DROP table if exists preprocess.grid_250;
 create table preprocess.grid_250 as (
-SELECT cell FROM 
-(SELECT (
-ST_Dump(makegrid_2d(buffer_geom, -- WGS84 SRID
- 250, 4486) -- cell step in meters
-)).geom AS cell from preprocess.buffer_2010) AS q_grid)
+WITH grid_sub as (
+	SELECT cell FROM 
+		(SELECT (
+		ST_Dump(makegrid_2d(buffer_geom, -- WGS84 SRID
+ 		250, 4486) -- cell step in meters
+	)).geom AS cell from preprocess.buffer_2010) AS q_grid)
+SELECT ROW_NUMBER() OVER (ORDER BY cell ASC) as cell_id,
+	cell
+FROM grid_sub);

@@ -1,0 +1,94 @@
+# Install packages
+#install.packages("yaml") # Be sure you have yaml package installed 
+#install.packages("rgdal")
+#install.packages("sp")
+#install.packages("postGIStools")
+
+# Import packages
+library(yaml) 
+library(sp)
+library(RPostgreSQL)
+library(postGIStools)
+
+## Read config file
+config = yaml.load_file("../../config.yaml")
+dbname = config$db$database
+host = config$db$host
+user = config$db$user
+pass = config$db$password
+
+## Connect to db
+con = dbConnect(drv = dbDriver("PostgreSQL"), 
+                 dbname = config$db$database, host = config$db$host, 
+                 port = config$db$port, user = config$db$user, 
+                 password = config$db$password)
+
+## Find the intersection of the census
+query_share_columns = "select column_name 
+                       from information_schema.columns
+                          where table_schema = 'preprocess'
+                          and table_name = 'ageb_zm_2010'
+                          and column_name not in ('clave_ageb','geom','gid')
+                       intersect
+                       select column_name 
+                       from information_schema.columns
+                       where table_schema = 'preprocess'
+                       and table_name = 'ageb_zm_2005'
+                       order by column_name"
+share_columns = get_postgis_query(con, query_share_columns)$column_name
+
+## split the list into totals and averages
+### All avg columns have to have the word 'promedio' to distinguish them
+cols_totals = share_columns[-grep("promedio", share_columns)]
+cols_avg = share_columns[grep("promedio", share_columns)]
+
+## convert to string for query
+cols_totals_str = paste(cols_totals, collapse = ', ')
+cols_avg_str = paste(cols_avg, collapse = ', ')
+# use percentages
+cols_totals_fraction = paste(sprintf("(porcentage_ageb_share * %s::float) as %s", cols_totals, cols_totals), 
+                             collapse = ', ')
+
+## for aggregates
+agg_totals_str = paste(sprintf("sum(%s)::int as %s", cols_totals, cols_totals), collapse= ', ')
+agg_avg_str = paste(sprintf("avg(%s::float) as %s", cols_avg, cols_avg), collapse= ', ')
+
+## Big Query 
+table_name = 'ageb_zm_2010'
+
+query_intersection = sprintf("select
+                          cell_id,
+                          cell,
+                          st_area(ST_Intersection(geom, cell)) / st_area(geom) as porcentage_ageb_share,
+                          %s, %s 
+                    from preprocess.grid_250
+                    left join preprocess.%s
+                    on st_intersects(cell, geom)", 
+                               cols_totals_str,
+                               cols_avg_str,
+                               table_name)
+
+query_fractions = sprintf("select
+                             cell_id,
+                             cell, 
+                             %s, %s
+                         from t_intersection", 
+                          cols_totals_fraction,
+                          cols_avg_str)
+
+query_create = sprintf("Create table semantic.%s as (
+                    with t_intersection as (%s),
+                         t_fractions as (%s)
+                    select 
+                       cell_id, 
+                       cell,
+                       %s, %s
+                    from t_fractions
+                    group by 1,2)", 
+                         table_name,
+                         query_intersection,
+                         query_fractions,
+                         agg_totals_str,
+                         agg_avg_str)
+# call query
+dbSendQuery(con, query_create)
