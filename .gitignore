@@ -3,7 +3,6 @@
 .RData
 .Ruserdata
 .DS_Store
-_book/
 config.yaml
 etl/input/inegi
 data/
