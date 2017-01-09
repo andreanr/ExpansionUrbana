@@ -87,7 +87,19 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
   dbSendQuery(con, query_create)
 }
 
+### FOR ITER:
+UpdateGeometry <- function(config, table_old, table_new){
+  con = Connect2PosgreSQL(config)
+  query_update_geom  = sprintf( "UPDATE preprocess.%s as t_old
+                                SET geom = t_new.geom
+                                FROM preprocess.%s as t_new
+                                WHERE t_old.cve_loc = t_new.cve_loc", 
+                                table_old,
+                                table_new )
+  dbSendQuery(con, query_update_geom)
+}
 
+#---------------------------------------------------------------
 
 ## Read config file
 config = yaml.load_file("../../config.yaml")
@@ -107,6 +119,11 @@ query_share_columns = ("select column_name
 con = Connect2PosgreSQL(config)
 share_columns = get_postgis_query(con, query_share_columns)$column_name
 
+# Join census and grid
 JoinCensusAndGrid(config,share_columns,'ageb_zm_2010')
 JoinCensusAndGrid(config,share_columns,'ageb_zm_2005')
 
+# update geometries with more updated iters
+UpdateGeometry(config, 'iter_2005', 'iter_2010')
+UpdateGeometry(config, 'iter_2000', 'iter_2010')
+UpdateGeometry(config, 'iter_2000', 'iter_2005')
