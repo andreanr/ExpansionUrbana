@@ -44,7 +44,7 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
   agg_avg_str = paste(sprintf("avg(%s::float) as %s", cols_avg, cols_avg), collapse= ', ')
 
   # Query delete if exist
-  query_delete = sprintf("drop table if exists semantic.%s", table_name)
+  query_delete = sprintf("drop table if exists grids.%s", table_name)
   ## Query that creates the intersection 
   query_intersection = sprintf("select
                             cell_id,
@@ -68,7 +68,7 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
                               cols_avg_str)
   
   #Query that groups by cell to sum/avg each column
-  query_create = sprintf("Create table semantic.%s as (
+  query_create = sprintf("Create table grids.%s as (
                              with t_intersection as (%s),
                                    t_fractions as (%s)
                               select 
@@ -87,17 +87,7 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
   dbSendQuery(con, query_create)
 }
 
-### FOR ITER:
-UpdateGeometry <- function(config, table_old, table_new){
-  con = Connect2PosgreSQL(config)
-  query_update_geom  = sprintf( "UPDATE preprocess.%s as t_old
-                                SET geom = t_new.geom
-                                FROM preprocess.%s as t_new
-                                WHERE t_old.cve_loc = t_new.cve_loc", 
-                                table_old,
-                                table_new )
-  dbSendQuery(con, query_update_geom)
-}
+
 
 #---------------------------------------------------------------
 
@@ -123,7 +113,3 @@ share_columns = get_postgis_query(con, query_share_columns)$column_name
 JoinCensusAndGrid(config,share_columns,'ageb_zm_2010')
 JoinCensusAndGrid(config,share_columns,'ageb_zm_2005')
 
-# update geometries with more updated iters
-UpdateGeometry(config, 'iter_2005', 'iter_2010')
-UpdateGeometry(config, 'iter_2000', 'iter_2010')
-UpdateGeometry(config, 'iter_2000', 'iter_2005')
