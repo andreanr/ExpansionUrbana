@@ -10,9 +10,15 @@ RAW_DATA_FOLDER=$(cat '../config.yaml' | shyaml get-value etl.raw)
 EXTRACTED_DATA_FOLDER=$(cat '../config.yaml' | shyaml get-value etl.extracted)
 
 ############# rasters de elevacion digital ##############
-# raster2pgsql -d -I -C -M -F -t 100x100 -s 32613 -t 100x100 "$EXTRACTED_FOLDER/702825548681_b/h1310mde.bil" raw.elevacion_digital_1 | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
-# raster2pgsql -d -I -C -M -F -t 100x100 -s 32613 -t 100x100 "$EXTRACTED_FOLDER/702825548698_b/h1311mde.bil" raw.elevacion_digital_2 | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
+yes | unzip $RAW_DATA_FOLDER/702825548681_b -d  $EXTRACTED_DATA_FOLDER
+yes | unzip $RAW_DATA_FOLDER/702825548698_b -d  $EXTRACTED_DATA_FOLDER
 
-yes | unrar e $RAW_DATA_FOLDER/CEM_V3_R120_E08.rar $EXTRACTED_DATA_FOLDER
-raster2pgsql -s 4019  -d -I -C -M -F -t 100x100 -s 32613 -t 100x100 $EXTRACTED_DATA_FOLDER"/Chihuahua30_R120m.bil" raw.elevacion_digital | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
+rm -R $EXTRACTED_DATA_FOLDER/geography
+mkdir $EXTRACTED_DATA_FOLDER/geography
+
+cp $EXTRACTED_DATA_FOLDER/702825548681_b/* $EXTRACTED_DATA_FOLDER/geography/
+cp $EXTRACTED_DATA_FOLDER/702825548698_b/* $EXTRACTED_DATA_FOLDER/geography/
+
+raster2pgsql -d -I -C -M -F -t 100x100 -s 32613 $EXTRACTED_DATA_FOLDER/geography/*.bil raw.elevacion_digital > elev.sql 
+psql -d $DB_NAME -h $DB_HOST -U $DB_USER -f elev.sql
 

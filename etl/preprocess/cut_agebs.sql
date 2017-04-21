@@ -18,6 +18,8 @@ CREATE TABLE preprocess.ageb_zm_2000 AS
     JOIN preprocess.metropolitan_area AS metro
     ON st_within(ageb.geom, metro.geom);
 
+CREATE INDEX ON preprocess.ageb_zm_2000 USING GIST (geom);
+
 -- AGEB 2005
 DROP TABLE IF EXISTS preprocess.ageb_zm_2005;
 CREATE TABLE preprocess.ageb_zm_2005 AS
@@ -39,6 +41,8 @@ CREATE TABLE preprocess.ageb_zm_2005 AS
    FROM cut_agebs 
    LEFT JOIN raw.censo_urbano_2005
       ON clave_ageb = lpad(clave, 13, '0') ; 
+
+CREATE INDEX ON preprocess.ageb_zm_2005 USING GIST (geom);
 
 -- AGEB 2010
 DROP TABLE IF EXISTS preprocess.ageb_zm_2010;
@@ -62,3 +66,5 @@ CREATE TABLE preprocess.ageb_zm_2010 AS
   LEFT JOIN raw.censo_urbano_2010
        ON clave_ageb = entidad || mun || loc || ageb
        WHERE mza = '000';
+
+CREATE INDEX ON preprocess.ageb_zm_2010 USING GIST (geom);

@@ -29,3 +29,6 @@ WITH grid_sub as (
 SELECT ROW_NUMBER() OVER (ORDER BY cell ASC) as cell_id,
 	cell
 FROM grid_sub);
+
+CREATE INDEX ON preprocess.grid_250 (cell_id);
+CREATE INDEX ON preprocess.grid_250 USING GIST (cell);

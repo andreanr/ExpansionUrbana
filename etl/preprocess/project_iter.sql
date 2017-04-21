@@ -1,3 +1,6 @@
+
+--### 2000 ####
+
 DROP TABLE IF EXISTS preprocess.iter_2000;
 CREATE TABLE preprocess.iter_2000 AS
 WITH t_decimal AS (
@@ -21,6 +24,9 @@ FROM t_transform as iter
 JOIN preprocess.metropolitan_area AS metro
 ON st_within(iter.geom, st_transform(metro.geom, 4486)) ;
 
+CREATE INDEX ON preprocess.iter_2000 USING GIST (geom);
+
+--### 2005 ####
 
 DROP TABLE IF EXISTS preprocess.iter_2005;
 CREATE TABLE preprocess.iter_2005 AS
@@ -45,6 +51,9 @@ FROM t_transform as iter
 JOIN preprocess.metropolitan_area AS metro
 ON st_within(iter.geom, st_transform(metro.geom, 4486));
 
+CREATE INDEX ON preprocess.iter_2010 USING GIST (geom);
+
+--### 2010 ####
 
 DROP TABLE IF EXISTS preprocess.iter_2010;
 CREATE TABLE preprocess.iter_2010 AS
@@ -69,6 +78,6 @@ FROM t_transform as iter
 JOIN preprocess.metropolitan_area AS metro
 ON st_within(iter.geom, st_transform(metro.geom, 4486));
 
-
+CREATE INDEX ON preprocess.iter_2010 USING GIST (geom);
 
 
