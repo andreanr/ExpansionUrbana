@@ -6,17 +6,19 @@
 CREATE TABLE grids.slope AS (
     WITH clip_slope_pct AS (
         SELECT cell_id,
-	       ST_SummaryStats(st_clip(rast_percent, 1, cell, True)) AS stats_pct
+	       ST_SummaryStats(st_union(st_clip(rast_percent, 1, cell, True))) AS stats_pct
 	FROM preprocess.grid_250
 	LEFT JOIN preprocess.slope
 	ON ST_Intersects(rast_percent, cell)
+	GROUP BY cell_id
     ),
     clip_slope_degrees AS (
 	SELECT cell_id,
-		ST_SummaryStats(st_clip(rast_degrees, 1, cell, True)) AS stats_degrees
+		ST_SummaryStats(st_union(st_clip(rast_degrees, 1, cell, True))) AS stats_degrees
 	FROM preprocess.grid_250
 	LEFT JOIN preprocess.slope
 	ON ST_Intersects(rast_degrees, cell)
+	GROUP BY cell_id
      )
 	SELECT cell_id,
 		(stats_pct).min AS min_slope_pct,
