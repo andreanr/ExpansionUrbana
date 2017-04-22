@@ -5,7 +5,7 @@ DB_USER=$(cat '../config.yaml' | shyaml get-value db.user)
 DB_NAME=$(cat '../config.yaml' | shyaml get-value db.database)
 
 #Create extension and add inegi spatial reference
-#psql -h $DB_HOST -U $DB_USER -d $DB_NAME < 'add_spatial_ref.sql'
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < 'add_spatial_ref.sql'
 
 #create schemas
 echo 'Dropping schemas if exists...'
@@ -27,11 +27,11 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA ml;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA results;"
 
 echo 'Populating raw data...'
-sh input/ageb_shapefiles/import_ageb_shapefiles.sh
-sh input/census/import_census.sh
-sh input/denue/import_denue.sh
-sh input/geography/import_geography.sh
-sh input/transportation/import_transportation.sh
+sh raw/ageb_shapefiles/import_ageb_shapefiles.sh
+sh raw/census/import_census.sh
+sh raw/denue/import_denue.sh
+sh raw/geography/import_geography.sh
+sh raw/transportation/import_transportation.sh
 
 echo 'Running pre-process'
 sh run_preprocess.sh

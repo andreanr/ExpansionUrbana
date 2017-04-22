@@ -29,12 +29,16 @@ from (select st_pixelaspolygons(rast,1) as rc from raw.elevacion_digital) foo;
 -------------------------------------------------------------------------------------------------
 ------------------------------------------- SLOPE -----------------------------------------------
 -------------------------------------------------------------------------------------------------
-create table clean.slope as 
+DROP TABLE IF EXISTS preprocess.slope;
+create table preprocess.slope as 
 select rid, st_slope(rast,1,'32BF','PERCENT') as rast_percent, st_slope(rast,1) as rast_degrees
 from raw.elevacion_digital;
 
-select st_valuecount(rast_percent,1) from clean.slope order by st_valuecount(rast_percent,1) DESC
-select st_valuecount(rast_degrees,1) from clean.slope order by st_valuecount(rast_degrees,1) desc
+
+select st_summarystats(rast_percent,1) from slope;
+
+select st_valuecount(rast_percent,1) from slope order by st_valuecount(rast_percent,1) desc;
+select st_valuecount(rast_degrees,1) from slope order by st_valuecount(rast_degrees,1) desc
 
 
 

@@ -7,7 +7,7 @@ ROOT_PATH=$(cat '../config.yaml' | shyaml get-value db.root)
 
 echo 'Creating buffer and grid...'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/metropolitan_municipios.sql"
-
+ 
 echo 'Cut ageb to metropolitan area'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_agebs.sql"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/utils.sql"
@@ -21,3 +21,9 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME -v path=$ROOT_PATH/etl/input/ageb_shape
 
 echo 'Create slope'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/slope.sql"
+
+echo 'Transportation'
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_transportation.sql"
+
+echo 'DENUE'
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_denue.sql"
