@@ -36,9 +36,10 @@ UpdateGeometry <- function(config, table_old, table_new){
 
 
 # Join ITER with grid
-JoinITERAndGrid <- function(config, columns_to_use, table_name){
-  # Connect to db
-  con <- Connect2PosgreSQL(config)
+JoinITERAndGrid <- function(config, columns_to_use, year){
+  # Table name
+  table_name = sprintf("iter_%s", year)
+  
   ## split the list into totals and averages
   ### All avg columns have to have the word 'promedio' to distinguish them
   cols_totals = columns_to_use[-grep("promedio", columns_to_use)]
@@ -53,11 +54,10 @@ JoinITERAndGrid <- function(config, columns_to_use, table_name){
   agg_avg_str = paste(sprintf("avg(%s::float) as %s", cols_avg, cols_avg), collapse= ', ')
   
   # Query delete if exist
-  query_delete = sprintf("drop table if exists grids.%s", table_name)
+  #query_delete = sprintf("drop table if exists grids.%s", table_name)
   ## Query that creates the intersection 
   query_intersection = sprintf("select
                                cell_id,
-                               cell,
                                %s, %s 
                                from preprocess.grid_250
                                left join preprocess.%s
@@ -67,21 +67,19 @@ JoinITERAndGrid <- function(config, columns_to_use, table_name){
                                table_name)
   
   #Query that groups by cell to sum/avg each column
-  query_create = sprintf("Create table grids.%s as (
-                         with t_intersection as (%s)
-                         select 
-                         cell_id, 
-                         cell,
-                         %s, %s
+  query_create = sprintf("with t_intersection as (%s)
+                            select 
+                                 cell_id, 
+                                  %s::TEXT as year,
+                                  %s, %s
                          from t_intersection
-                         group by 1,2)", 
-                         table_name,
+                         group by 1", 
                          query_intersection,
+                         year,
                          agg_totals_str,
                          agg_avg_str)
-  # call query
-  dbSendQuery(con, query_delete)
-  dbSendQuery(con, query_create)
+
+  return(query_create)
 }
 
 
@@ -110,7 +108,20 @@ query_share_columns = ("select column_name
                        order by column_name")
 con = Connect2PosgreSQL(config)
 share_columns = get_postgis_query(con, query_share_columns)$column_name
+dbDisconnect(con)
+
+# Join census and grid
+query_delete = c("drop table if exists grids.censos_rurales")
+create_query = sprintf("CREATE TABLE grids.censos_rurales AS 
+                       (%s)
+                       UNION 
+                       (%s)",
+                       JoinITERAndGrid(config,share_columns,2005),
+                       JoinITERAndGrid(config,share_columns,2010))
+
+con = Connect2PosgreSQL(config)
+dbSendQuery(con, query_delete)
+dbSendQuery(con, create_query)
+dbDisconnect(con)
 
 
-JoinITERAndGrid(config,share_columns,'iter_2010')
-JoinITERAndGrid(config,share_columns,'iter_2005')

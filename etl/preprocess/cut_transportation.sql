@@ -10,9 +10,6 @@ CREATE TABLE preprocess.carreteras AS (
 		SELECT *, st_transform(geom, 4326) as geom_tr
 		FROM raw.carreteras)
 	SELECT gid,
-	       CASE WHEN tipovia = 'CARRETERA' THEN 1 ELSE 0 END as carretera,
-	       CASE WHEN tipovia = 'CALLE' THEN 1 ELSE 0 END as calle,
-	       CASE WHEN tipovia = 'AVENIDA' THEN 1 ELSE 0 END as avenida,
 	       tipovia as tipo_via,
 	       tipo as tipo,
 	       dere_tran as derecho_transito,
@@ -24,6 +21,9 @@ CREATE TABLE preprocess.carreteras AS (
 	JOIN preprocess.metropolitan_area AS metro
 	ON st_within(c.geom_tr, metro.geom)
 );
+
+CREATE INDEX ON preprocess.carreteras (derecho_transito);
+CREATE INDEX ON preprocess.carreteras (tipo_via);
 
 --------------------------------------------------
 -- CROP aeropuertos to use only metropolitan area

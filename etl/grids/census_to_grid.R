@@ -25,9 +25,10 @@ Connect2PosgreSQL <- function(config){
   return(con)
 }
 
-JoinCensusAndGrid <- function(config, columns_to_use, table_name){
-  # Connect to db
-  con <- Connect2PosgreSQL(config)
+JoinCensusAndGrid <- function(config, columns_to_use, year){
+  # Table name
+  table_name = sprintf("ageb_zm_%s", year)
+  
   ## split the list into totals and averages
   ### All avg columns have to have the word 'promedio' to distinguish them
   cols_totals = columns_to_use[-grep("promedio", columns_to_use)]
@@ -42,13 +43,10 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
   ## for aggregates
   agg_totals_str = paste(sprintf("sum(%s)::int as %s", cols_totals, cols_totals), collapse= ', ')
   agg_avg_str = paste(sprintf("avg(%s::float) as %s", cols_avg, cols_avg), collapse= ', ')
-
-  # Query delete if exist
-  query_delete = sprintf("drop table if exists grids.%s", table_name)
+  
   ## Query that creates the intersection 
   query_intersection = sprintf("select
                             cell_id,
-                            cell,
                             st_area(ST_Intersection(geom, cell)) / st_area(geom) as porcentage_ageb_share,
                             %s, %s 
                       from preprocess.grid_250
@@ -61,30 +59,27 @@ JoinCensusAndGrid <- function(config, columns_to_use, table_name){
   #Query that assigns the values for each part of intersection
   query_fractions = sprintf("select
                                 cell_id,
-                                cell, 
                                 %s, %s
                              from t_intersection", 
                               cols_totals_fraction,
                               cols_avg_str)
   
   #Query that groups by cell to sum/avg each column
-  query_create = sprintf("Create table grids.%s as (
-                             with t_intersection as (%s),
+    query_create = sprintf( "with t_intersection as (%s),
                                    t_fractions as (%s)
                               select 
-                                  cell_id, 
-                                  cell,
+                                  cell_id,
+                                  %s::TEXT as year,
                                   %s, %s
                               from t_fractions
-                              group by 1,2)", 
-                                  table_name,
+                              group by 1", 
                                   query_intersection,
                                   query_fractions,
+                                  year,
                                   agg_totals_str,
                                   agg_avg_str)
-  # call query
-  dbSendQuery(con, query_delete)
-  dbSendQuery(con, query_create)
+  # return query
+  return(query_create)
 }
 
 
@@ -108,8 +103,22 @@ query_share_columns = ("select column_name
                       order by column_name")
 con = Connect2PosgreSQL(config)
 share_columns = get_postgis_query(con, query_share_columns)$column_name
+dbDisconnect(con)
 
 # Join census and grid
-JoinCensusAndGrid(config,share_columns,'ageb_zm_2010')
-JoinCensusAndGrid(config,share_columns,'ageb_zm_2005')
+query_delete = c("drop table if exists grids.censos_urbanos")
+create_query = sprintf("CREATE TABLE grids.censos_urbanos AS 
+                 (%s)
+                 UNION 
+                 (%s)",
+                       JoinCensusAndGrid(config,share_columns,2005),
+                       JoinCensusAndGrid(config,share_columns,2010))
+
+con = Connect2PosgreSQL(config)
+dbSendQuery(con, query_delete)
+dbSendQuery(con, create_query)
+dbDisconnect(con)
+
+
+
 

@@ -17,4 +17,6 @@ CREATE TABLE preprocess.denue AS (
 	JOIN preprocess.metropolitan_area AS metro
 	ON st_within(d.geom_tr, metro.geom)
 );
+
+CREATE INDEX ON preprocess.denue (year_alta);
 	

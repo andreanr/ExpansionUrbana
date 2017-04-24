@@ -17,7 +17,7 @@ echo 'Project iter'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/project_iter.sql"
 
 echo 'Rename columns'
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -v path=$ROOT_PATH/etl/input/ageb_shapefiles < "preprocess/rename_censos.sql"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -v path=$ROOT_PATH/etl/raw/ageb_shapefiles < "preprocess/rename_censos.sql"
 
 echo 'Create slope'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/slope.sql"
