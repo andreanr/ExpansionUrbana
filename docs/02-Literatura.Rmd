@@ -4,24 +4,36 @@ output:
 ---
 # Revision de Literatura
 
-Revision teorica
-- supervisado
-- cientifico de datos
-- espacial
-
-## Expansión Urbana
+## Expansión Urbana 
 La expansión de las ciudades es un fenómeno que ha ocurrido desde siempre, en ocasiones de forma desordenada, generando diversos problemas por lo que la planeación urbana cada vez requiere mayor atención. En México actualmente existen 59 zonas metropolitanas las cuales concentran el 56.8\% de la población nacional (SEDESOL). Por otra parte, el crecimiento de la mancha urbana ha estado creciendo a una tasa por encima del incremento poblacional. Este crecimiento ha generado problemas de equidad, de crecimiento económico y deterioro ambiental. Debido a ello, es importante la planeación de los espacios urbanos y servicios con el fin de poder proporcionar a las personas una buena calidad de vida y construir ciudades más sustentables. 
 
 Se estima que entre 2010 y 2050 los países en desarrollo, México incluido entre ellos, incrementaran su población urbana en 2.6 billones de personas, a una tasa de 2.4\% al año (United Nations Population Division 2012, file 3). Esto implica que se requerirá generar lugares residenciales para estas personas dentro de la periferia urbana para abastecer el crecimiento de la demanda de tierra para casas. A pesar de que las zonas urbanas cubran una pequeña fracción de la tierra, su expansión ha alterado de manera significativa el paisaje natural creando grande impactos en el medio ambiente y el ecosistema.
 
 En México se estima que el 63\% de la población vive en áreas urbanas y que casi la mitad se concentra en la región centro del país (Eibenshutz). El crecimiento de las áreas urbanas ha ido aumentando a una tasa por encima del incremento poblacional. Este crecimiento ha rebasado la capacidad de los tres órganos de gobierno para planear y controlar las necesidades sociales lo que ha generado problemas de equidad, ambientales y económicos. Debido a ello, es importante la planeación de servicios y espacios urbanos con el fin de poder proporcionar a las personas una buena calidad de vida y construir ciudades más sustentables. Por ejemplo, la modelación del crecimiento urbano puede crear escenarios para adaptación y mitigación enfrentando los problemas relacionados a cada ciudad. 
 
-## Modelos de Predicción
+### Zona Metropolitana de Chihuahua
+La ciudad de Chihuahua fue fundada en 10000. dasdjsdlkasdad y ha crecido en los últimos años de bla a bla, y la desnidad d epoblación de bla a bla.
+mapa del IMPLAN.
+
+El creciemento hacia el lado norte ha sido más acelerado debido a su topología plana y facilidad de dotar de servicios (IMPLAN 2000). Su carácter de ciudad capital del estado de Chihuahua y su impolso en el desarrollo económico ha generado una migración de las poblaciones rualres. 
+Los nuevos desarrollos se localizan principalmente a las afueras de la ciduad.
+
+
+La adecuada Planeación y Gestión de una ciudad, da como resultados un Ordenamiento Territorial armónico, equilibrado y sustentable (ejemplos y referencia)
+
+La Ordenación Territorial de una ciudad es muy complja, ya que se compone de múltiples elementos: social, económico, político, físico y gubernamental, entre otros. De esta manera el tratar de entender los factores que y las relaciones espaciales de estos elementos es posible tener un mayor entendimiento del problema para generar acciones y decisiones más informadas.
+
+
+
+## Modelos de Aprendizaje Estadístico
 
 Modelos supervisados y no supervisados
 
+### Modelos no supervisados
+
+
 ### Modelos supervisados 
-En los modelos de predicción se busca encontrar la relación existente entre las variables explicativas $X=(X^1, X^2, ..., X^p)$ y la variable de interés ($y$), a través de un modelo probabilístico $P(X,y)$. Esto se realiza con la finalidad de poder explicar la relación que existe entre las variables, así como para predecir futuros valores de la variable de interés, dado valores conocidos a las variables explicativas. Una forma de entenderlo, es pensar que la información generada por medio de una caja por la cual las variables explicativas $X$ entran y por el otro lado, la variable de interés sale. Adentro de la caja hay funciones o algoritmos que relacionan las variables explicativas con la variable de interés. Esta idea es ilustrada en la Figura.
+En los modelos de predicción se busca encontrar la relación existente entre las variables explicativas $X=(X^1, X^2, ..., X^p)$ y la variable de interés ($y$), a través de un modelo probabilístico $P(X,y)$. Esto se realiza con la finalidad de poder explicar la relación que existe entre las variables, así como para predecir futuros valores de la variable de interés, dado valores conocidos a las variables explicativas. Una forma de entenderlo, es pensar que la información generada por medio de una caja por la cual las variables explicativas $X$ entran y por el otro lado, la variable de interés sale. Adentro de la caja hay funciones o algoritmos que relacionan las variables explicativas con la variable de interés. 
 
 Existen muchos modelos de predicción, los cuales utilizan distintas funciones para capturar la relación entre las variables. Dependerá de los datos y de la información que se conozca *a priori* para la elección de dicho modelo. A continuación se describen los modelos de predicción que se utilizarán y compararán.
 
@@ -132,6 +144,10 @@ El valor $p_{j^{*}}(t)$ nos da el "score" dentro de cada nodo terminal, el cual 
 El Bosque Aleatorios pertenece a los modelos de aprendizaje estadístico y surge con la idea de mejorar el desempeño de los árboles de decisión. Estos modelos surgen a partir de la idea de ensambles de modelos. 
 
 La idea general del modelo es crear distintas sub-muestras de la muestra de entrenamiento, generando árboles de clasificación con cada una y al final promediar las distintas replicaciones. De esta manera el modelo se hace más robusto que un árbol de clasificación y la varianza en los estimadores se reduce. 
+
+<!----------------------------------------------------------------------------------------->
+#### Extra Árboles
+
 
 <!----------------------------------------------------------------------------------------->
 ## Información Geo-espacial: Métodos y Proyecciones

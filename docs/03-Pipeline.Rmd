@@ -4,83 +4,23 @@ output:
 ---
 # Pipeline
 
-(Pipeline)
-Mi forma de validar
-1er parrafo: todo lo anterior se puede plantear de una manera especifica
-- producto utilizando metodos ..
-Datos de entrada
-Apendice: estadisticas de los datos (script R) snipets
-Crisis de y metodos reproducibles
+Todo lo anterior se puede plantear de una manera específica. 
+Utilizando métodos ...
 
-Pipeline- flows de caudritos
+## Construcción de Base de Datos
+El presente estudio busca aplicar herramientas de aprendizaje estadístico para predecir la expansión urbana de la Zona Metropolitana de Chihuahua a través de características geográficas y demográficas y económicas descritas a continuación.
 
-resultados de correr el pipeline
-mapas -> mapas predichos
+Debido a la naturaleza de la información de las variables se decidió utilizar una cuadrícula o malla para representar la información. 
 
-Modelos: bla bla bla
-(utilize estos hiperparámetros)
-ensmable- percepton (ese objeto enorme es mi modelo)- mezclas los tres modelos y eleccion por votacion
+Se propone crear una malla cuadriculada de polígonos que cubran toda el área de influencia del modelo, en este caso la zona metropolitana de Chihuahua. De esta forma se organiza la información relevante obtenida a través de distintas fuentes dentro de la malla de tal manera que cada cuadrícula posee la información asociada a cada área. Además  a cada cuadrícula se le asigna una variable que indica si pertenece o no a la mancha urbana representada por los ageb.
 
-## Datos
+Construcción de la Malla:
+- Malla: malla cuadriculada de polígonos que cubran toda el área de influencia del modelo de 250 metros x 250 metros.
+- Área de influencia: Será sobre la cual se realiza la modelación y se asume que el crecimiento no superará esta área de influencia. Para Chihuahua, se consideró un radio de 7,000 metros.
 
-### Variables utilizadas
-El presente estudio busca predecir la expansión de la zona urbana de la ciudad de Chihuahua, por lo que en primera instancia se asume que este cambio está asociado con características geográficas y sociodemográficasde cada área de observación y las vecindades que la rodean. De esta manera se recopila información acerca de las variables que se asumieron de mayor relevancia para explicar este fenómeno, las cuales se muestran en los Cuadros ~\ref{tab:variables_censo} y ~\ref{tab:variables_calculadas}.  Estas variables son consideradas geo-espaciales, puesto que contienen, en adición a su atributo su localización. 
-
-\begin{table}[!ht]
-    \centering
-     \caption{Variables Socioeconómicas del Censo de Población y Vivienda}\label{tab:variables_censo}
-        \begin{tabular}{p{4cm}|p{6cm}}\hline
-       \textbf{Variable} & \textbf{Descripción} \\
-        \hline
-        POBTOT & Población total \\
-        PSINDER & Población sin derechohabientes de servicio de salud\\
-        P15Y\_SE & Población mayor a 15 años sin educación\\
-        TVIVHAB & Total de viviendas habitadas \\
-        PROM\_OCUP & Promedio de ocupantes por vivienda\\
-        VPH\_SNBIEN & Viviendas sin bienes\\
-        \hline
-        \end{tabular}
-        \caption*{\small Fuente: Elaboración propia con datos del INEGI, 2016}
-\end{table}
-
-\begin{table}[!h]
-    \centering
-     \caption{Variables Geo-Espaciales Calculadas}\label{tab:variables_calculadas}
-        \begin{tabular}{p{2cm}|p{5.5cm}|p{4cm}}\hline
-       \textbf{Variable} & \textbf{Descripción} & 			\textbf{Fuente}\\
-        \hline
-        Dist\_car & Distancia a carreteras principales (m) & INEGI 1993 \\
-        Pendiente & Porcentaje de Pendiente (\%) & INEGI\\
-        Dist\_ZU & Distancia a Zona Urbana (m) & Calculada con información de INEGI\\
-        Centro & Distancia al centro urbano & Google Earth 2015 \\
-        DENUEg & Distancia a las unidades económicas con más de 250 empleados & INEGI: Directorio Estadístico Nacional de Unidades Económicas\\
-        DENUEm & Distancia a las unidades económicas que emplean entre 50 y 250 personas & INEGI: Directorio Estadístico Nacional de Unidades Económicas\\
-        \hline
-        \end{tabular}
-        \caption*{\small Fuente: Elaboración propia, 2016}
-\end{table}
-
-Con el fin de poder medir las causas de expansión urbana, se define en este trabajo la  variable de interés (a predecir)  como un cambio en el uso de suelo de no-urbano a urbano, en un periodo de tiempo determinado. Además se proponen las variables mostradas los Cuadros ~\ref{tab:variables_censo} y ~\ref{tab:variables_calculadas} como variables que ayudan a determinar si hay un cambio de no-urbano a urbano.
-
-
-\section{Construcción Base de Datos}
-
-Debido a la naturaleza de la información de las variables se optó por utilizar un enfoque estadístico de cuadrícula para acomodar la información. 
-
-En el se propone crear una malla cuadriculada de polígonos que cubran toda el área de influencia del modelo, en este caso la zona metropolitana de Chihuahua. De esta forma se organiza la información relevante obtenida a través de distintas fuentes dentro de la malla de tal manera que cada cuadrícula posee la información asociada a ese pedazo de área. Además  a cada cuadrícula se le asigna una variable que indica si pertenece o no a la mancha urbana representada por los ageb.
-
-\section{Metodología para la Construcción de la Base de Datos}
-
-## Construcción de las observaciones y el área de influencia:
-Primero se unió la información sobre los censos (conteo para 2005) de población y vivienda por AGEB (SCINCE 2000, 2005 y 2010) de la zona metropolitana de Chihuahua con los shapefiles de los AGEB urbanos de INEGI. Al sobreponer los tres mapas, es posible observar el crecimiento del área urbana de los AGEB en los tres periodos. 
-
----- mapa
-
-A partir del área urbana de los AGEB de 2010 se generó un área de influencia que será sobre la cual se realizó la modelación y se asume que el crecimiento no superará esta área de influencia. Para Chihuahua, se consideró un radio de 7,000 metros.
-
-Se creó una malla cuadriculada de polígonos de 500 x 500 metros cubriendo el área el influencia. Cada cuadrícula representa una unidad de observación en la cual se incluyó la información de las variables de población y vivienda, demográficas y espaciales.
-
-Para incluir la información socioeconómica a la cuadricula,  se utilizó la información de los censos 2000 y 2010, junto con la del conteo del 2005 (SCINCE 2000, 2005 y 2010) por AGEB se realizó el siguiente procedimiento:
+### Datos demográficos
+Se utilizó la información de los censos 2000 y 2010, junto con la del conteo del 2005 \cite{inegi} a nivel AGEB (explicar qué es ageb como i) 
+se realizó el siguiente procedimiento:
 
 a. Se realizó una transformación de coordenadas correspondientes para tener tanto el shapefile de los AGEB como la malla dentro de las mismas unidades, en este caso UTM zona 13 Norte.  
 
@@ -109,7 +49,6 @@ b) Siguiendo la misma lógica para las localidades rurales que en el año 2000 s
 
 c)  Por último, si una localidad rural se encontraba en 2000 y en 2010 pero no en 2005, entonces se generó la información de esa localidad para 2005 tomando los valores promedio de 2000 y 2010. 
 
-
 iii) Una vez homogeneizando las coordenadas, se incluyó la información del los las localidades rurales a la malla de la siguiente manera:
 
 a) Se eligieron las variables de interés (las mismas de los AGEB urbanos incluidas en las mallas para 2000, 2005 y 2010). Se eliminaron las localidades con población mayor a 2,500 habitantes, puesto que estas ya son localidades urbanas y su información se encuentra incluida en los AGEB urbanos.  
@@ -118,15 +57,16 @@ b) Se intersectó el shapefile de las localidades rurales con la malla (se hizo 
 
 Utilizando la información de las localidades rurales, se incluyó a la malla la distancia mínima, en metros, del centro de cada cuadrícula a la localidad rural más cercana.  Esta variable fue incluida debido a que se considera que las localidades rurales cercanas a la zona urbana tienden a migrar en busca de trabajo y servicios. 
 
--- mapa
+### Económicos
+Cercanía a unidades económicas (DENUE) y al centro urbano
 
-La siguiente variable que se incluyó fue la pendiente, la cual se construyó a partir de la altura de los Modelos Digitales de Elevación (INEGI 2000 a escala de 1:250 metros) la cual viene en formato raster.  
+la distancia de cada cuadrícula a las unidades económicas grandes y medianas que se encuentran en el Directorio Estadístico Nacional de Unidades Económicas (DENUE). Para realizar esto primero se consideran unidades económicas grandes a las que registren tener a más de 250 empleados y medianas a las que registren entre 51 y 250 empleados. A partir de estas unidades se calculó la distancia mínima en metros que hay desde el centro de cada cuadrícula a estas unidades.
 
-Se extrajo la información del raster para incluirla a la malla por medio  una función que se aplica a los valores del raster (pixeles) que caen dentro de una misma cuadrícula. Se crearon tres varibles distintas una para cada función: 
-- slope_mean: utilizando el promedio   
-- slope_med: utilizando la mediana   
-- slope_max: utilizando el máximo   
+La distancia que hay de cada cuadrícula al centro urbano. Para ello, primero se encontró el centro urbano y se expandió hasta un radio de 1 km, donde se considera que se acumulan las principales actividades económicas del centro urbano. A partir de ese radio se calculo la mínima distancia en metros que hay desde el centro de cada cuadrícula al centro urbano como se muestra en la figura siguiente. 
 
+
+### Vías de Comunicación
+carreteras, vías férreas, aeropuertos
 Después se agregó la distancia que hay de cada cuadrícula a las carreteras o vías principales utilizando el mapa de OpenStreetMap para México. La distancia se calculó como la distancia mínima que hay desde el centroide de cada cuadrícula a la red carretera o vías principales como se muestra en la figura de abajo. Se consideraron los siguientes tipos de vías: 
 
 - Autopistas (motorway, motorway_link)
@@ -135,11 +75,16 @@ Después se agregó la distancia que hay de cada cuadrícula a las carreteras o 
 - Red terciaria (tertiary, tertiary_link)
 - Red troncal (trunk, trunk_link)
 
-OpenStreetMap (http://openstreetmap.org) is a website where people can collaborate to create and edit geo-spatial data. OpenStreetMap does not use a standard format such as Shapefiles to store its data. Instead, it has developed its own XML-based format for representing geo-spatial data in the form of nodes (single points), ways (sequences of points that define a line), areas (closed ways that represent polygons), and relations (collections of other elements). Any element (node, way, or relation) can have a number of tags associated with it, providing additional information about that element.
 
-A continuación se agregó una variable que indica la distancia que hay de cada cuadrícula al centro urbano. Para ello, primero se encontró el centro urbano y se expandió hasta un radio de 1 km, donde se considera que se acumulan las principales actividades económicas del centro urbano. A partir de ese radio se calculo la mínima distancia en metros que hay desde el centro de cada cuadrícula al centro urbano como se muestra en la figura siguiente. 
+### Geográficos
+pendiente, se probó con porcentaje de pendiente y en grados.
 
-Siguiendo con las variables económicas, se construyeron dos variables más: la distancia de cada cuadrícula a las unidades económicas grandes y medianas que se encuentran en el Directorio Estadístico Nacional de Unidades Económicas (DENUE). Para realizar esto primero se consideran unidades económicas grandes a las que registren tener a más de 250 empleados y medianas a las que registren entre 51 y 250 empleados. A partir de estas unidades se calculó la distancia mínima en metros que hay desde el centro de cada cuadrícula a estas unidades.
+La pendiente se construyó a partir de la altura de los Modelos Digitales de Elevación (INEGI 2000 a escala de 1:250 metros) la cual viene en formato raster.  
+
+Se extrajo la información del raster para incluirla a la malla por medio  una función que se aplica a los valores del raster (pixeles) que caen dentro de una misma cuadrícula. Se crearon tres varibles distintas una para cada función: 
+- slope_mean: utilizando el promedio   
+- slope_med: utilizando la mediana   
+- slope_max: utilizando el máximo   
 
 Después de las variables económicas se agregó una variable que indica el tipo de uso de suelo al que pertenece cada cuadrícula, de acuerdo con las Capas de Uso de Suelo III, IV y V de INEGI(a escala 1:250 000) para cada una de las mallas del año que le corresponda. La información de las capas de uso de suelo muestra la distribución geográfica de los diferentes tipos de vegetación natural (primaria y secundaria) y de la vegetación inducida. La variable se agregó de la siguiente manera:
 
@@ -151,13 +96,19 @@ ii) Las categorías de las capas de uso de suelo de las tres series, se reclasif
 
 --Tabla Categoría Uso de Suelo
 
-
 iii) Después se transformaron las coordenadas de las capas de uso de suelo agrupadas, para que estuvieran en el mismo sistema de coordenadas que las mallas (UTM zona 13).   
 
 iv) Se intersectaron las capas de uso de suelo agrupadas con las mallas, cada una con el periodo que le corresponde. A partir de ahí se agregó una variable a la malla que indica el número de la categoría de uso de suelo que ocupa mayor porcentaje de área dentro de la cuadrícula.   
 
-Por último, se agregó una variable que indica la distancia de cada cuadrícula al área de los AGEB urbanos. Esta variable es cero para todas las cuadrículas que están dentro del área de los AGEB y para las cuadrículas afuera de está área se mide como la distancia mínima en metros que hay del centro de cada cuadrícula al área de los AGEB.   
 
-Después de tener las mallas para los tres periodos con todas las variables, se agrega en la malla del 2000 y del 2005 la variable a predecir, que en este caso para la malla del 2000 es la ZU_i de 2005 y para 2005 es la ZU_i de 2010 con i={25, 30, 50, 75} según se escoja para el modelo. En algunos casos esta variable de ZU_i tiene que corregirse, puesto que por errores de precisión puede resultar que para un periodo posterior ZU_i sea cero, mientras que en uno anterior sea uno. Dado que estamos suponiendo que esta ciudad no se ha reducido en área, se debe corregir para que esto no suceda. 
+### Label
+Con el fin de poder medir las causas de expansión urbana, se define en este trabajo la  variable de interés (a predecir)  como un cambio en el uso de suelo de no-urbano a urbano, en un periodo de tiempo determinado.
 
-Finalmente, la mallas de 2000 y 2005 deben ser recortadas para que la zona que abarquen sea solamente de 7,000 metros de distancia del área de los AGEB de cada periodo.   
+
+
+## Modelos
+
+
+
+
+ 

@@ -3,10 +3,6 @@ output:
   pdf_document: default
 ---
 # Introduccion
+La expansión urbana es un fenómeno que ha ocurrido desde siempre, en ocasiones de forma desordenada, generando diversos problemas sociales y ambientales. Por lo que para poder crear una planeación urbana se requiere entendimiento acerca de del comportamiento y los factores que generan que ciudades crezcan. 
 
-planteamiento problema que voy a hacer
-resumen
-Esta tesis trata de ...
-este problema se plantea resolver con y se propuso ...
-
-El objetivo de este estudio es comparar diferentes modelos de predicción para la expansión de la zona urbana de la ciudad de Chihuahua para encontrar el modelo que capture mejor la relación que existe entre este fénomeno y diversas variables sociodemográficas y geográficas.
+Este estudio se busca aplicar y comparar métodos de aprendizaje estadístico que aprende de los patrones del pasado, es decir de las relaciones geográficas, demográficas y económicas que han hecho crecer a la Zona Metropolitana de Chihuahua, para poder entender y poder predecir el creciemiento futuro. 
