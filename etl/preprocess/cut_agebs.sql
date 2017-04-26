@@ -10,13 +10,20 @@ CREATE TABLE preprocess.ageb_zm_2000 AS
 	SELECT gid,
 	       clvagb as clave_ageb,
 	       st_transform(geom, 4326) as geom
-	from raw.ageb_2000)
-    SELECT ageb.gid,
-           ageb.clave_ageb,
-	   st_transform(ageb.geom, 4486) as geom
-    FROM transform_ageb AS ageb
-    JOIN preprocess.metropolitan_area AS metro
-    ON st_within(ageb.geom, metro.geom);
+	from raw.ageb_2000
+    ), 
+    cut_agebs AS (
+       SELECT ageb.gid,
+              ageb.clave_ageb,
+	      st_transform(ageb.geom, 4486) as geom
+       FROM transform_ageb AS ageb
+       JOIN preprocess.metropolitan_area AS metro
+       ON st_within(ageb.geom, metro.geom)
+   ) 
+   SELECT censo.*, geom
+   FROM cut_agebs cut
+   LEFT JOIN raw.censo_urbano_2000 censo
+      ON clave_ageb = clave ;
 
 CREATE INDEX ON preprocess.ageb_zm_2000 USING GIST (geom);
 
