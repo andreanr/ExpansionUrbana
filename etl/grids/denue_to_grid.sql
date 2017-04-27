@@ -1,6 +1,6 @@
 
 
-CREATE TABLE grids.denue as (
+CREATE TABLE grids_250.denue as (
 	WITH denue_grouped AS (
 		SELECT year_alta, 
 		per_ocu, 
@@ -23,8 +23,8 @@ CREATE TABLE grids.denue as (
 		min(CASE WHEN per_ocu like ('251%')
 			THEN st_distance(cell, ST_ClosestPoint(geom, cell)) / 1000.0
 			ELSE NULL END) AS unidades_economicas_grandes_distancia_km
-	FROM preprocess.grid_250, denue_grouped
+	FROM grids_250.grid, denue_grouped
 	GROUP BY cell_id, year_alta
 );
 
-CREATE INDEX ON grids.denue (cell_id, year_alta);
+CREATE INDEX ON grids_250.denue (cell_id, year_alta);

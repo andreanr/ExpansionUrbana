@@ -1,22 +1,22 @@
 
-CREATE TABLE grids.aeropuertos as (
+CREATE TABLE grids_250.aeropuertos as (
 	SELECT cell_id,
 	       ST_Distance(st_centroid(geom), cell) /1000 AS aeropuerto_distancia_km
-	FROM preprocess.grid_250, preprocess.aeropuertos
+	FROM grids_250.grid, preprocess.aeropuertos
   );
 
-CREATE INDEX ON grids.aeropuertos (cell_id);
+CREATE INDEX ON grids_250.aeropuertos (cell_id);
 
-CREATE TABLE grids.vias_ferreas as (
+CREATE TABLE grids_250.vias_ferreas as (
 	SELECT cell_id,
 	       min(ST_Distance(st_centroid(geom), cell) /1000) AS via_ferrea_distancia_km
-	FROM preprocess.grid_250, preprocess.vias_ferreas
+	FROM grids_250.grid, preprocess.vias_ferreas
 	GROUP BY cell_id
 );
 
-CREATE INDEX ON grids.vias_ferreas (cell_id);
+CREATE INDEX ON grids_250.vias_ferreas (cell_id);
 
-CREATE TABLE grids.carreteras as (
+CREATE TABLE grids_250.carreteras as (
 	SELECT cell_id,
 	       min(CASE WHEN derecho_transito = 'CUOTA' 
 		   THEN ST_Distance(st_centroid(geom), cell) /1000.0 
@@ -42,10 +42,10 @@ CREATE TABLE grids.carreteras as (
 	       min(CASE WHEN numero_carriles = '4'
 		   THEN ST_Distance(st_centroid(geom), cell) /1000.0 
 		   ELSE NULL END) AS carriles_4_distancia_km
-	FROM preprocess.grid_250, preprocess.carreteras
+	FROM grids_250.grid, preprocess.carreteras
 	GROUP BY cell_id
 ); 
   
-CREATE INDEX ON grids.carreteras (cell_id);
+CREATE INDEX ON grids_250.carreteras (cell_id);
 	       
 	       

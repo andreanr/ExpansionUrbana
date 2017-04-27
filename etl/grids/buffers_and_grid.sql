@@ -18,8 +18,8 @@ select  st_buffer(st_multi(st_union(geom)),7000) as buffer_geom from preprocess.
 -------------------------------------------------------------------------------------------------
 --------------------------------------- Generate Grid -------------------------------------------
 -------------------------------------------------------------------------------------------------
-DROP table if exists preprocess.grid_250;
-create table preprocess.grid_250 as (
+DROP table if exists grids_250.grid;
+create table grids_250.grid as (
 WITH grid_sub as (
 	SELECT cell FROM 
 		(SELECT (
@@ -30,5 +30,5 @@ SELECT ROW_NUMBER() OVER (ORDER BY cell ASC) as cell_id,
 	cell
 FROM grid_sub);
 
-CREATE INDEX ON preprocess.grid_250 (cell_id);
-CREATE INDEX ON preprocess.grid_250 USING GIST (cell);
+CREATE INDEX ON grids_250.grid (cell_id);
+CREATE INDEX ON grids_250.grid USING GIST (cell);

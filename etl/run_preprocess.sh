@@ -5,13 +5,16 @@ DB_USER=$(cat '../config.yaml' | shyaml get-value db.user)
 DB_NAME=$(cat '../config.yaml' | shyaml get-value db.database)
 ROOT_PATH=$(cat '../config.yaml' | shyaml get-value db.root)
 
+
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists preprocess CASCADE;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA preprocess;"
+
 echo 'Creating buffer and grid...'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/metropolitan_municipios.sql"
  
 echo 'Cut ageb to metropolitan area'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_agebs.sql"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/utils.sql"
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/buffers_and_grid.sql"
 
 echo 'Project iter'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/project_iter.sql"
