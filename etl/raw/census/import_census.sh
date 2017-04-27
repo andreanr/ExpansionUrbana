@@ -14,7 +14,7 @@ EXTRACTED_DATA_FOLDER=$(cat '../config.yaml' | shyaml get-value etl.extracted)
 ###################### CENSO ###########################
 # 2000
 yes | unzip $RAW_DATA_FOLDER'/censo_urbano_2000.zip' -d $EXTRACTED_DATA_FOLDER
-awk 'FNR==1 && NR!=1{next;}{print}' $EXTRACTED_DATA_FOLDER/censo_urbano_2000/*csv > $EXTRACTED_DATA_FOLDER/tmp.csv
+awk 'FNR==1 && NR!=1{next;}{print}' $EXTRACTED_DATA_FOLDER/censo_urbano_2000/Chihuahua.csv > $EXTRACTED_DATA_FOLDER/tmp.csv
 cat $EXTRACTED_DATA_FOLDER/tmp.csv | dos2unix | sed 's/^M//g' > $EXTRACTED_DATA_FOLDER/censo_urbano_2000.csv
 cat $EXTRACTED_DATA_FOLDER'/censo_urbano_2000.csv' | dos2unix |tr [:upper:] [:lower:] | csvsql -e latin1 -i "postgresql" --no-constraints --tables raw.censo_urbano_2000 | tr -d "\"" > $EXTRACTED_DATA_FOLDER'/censo2000.sql'
 rm $EXTRACTED_DATA_FOLDER/tmp.csv

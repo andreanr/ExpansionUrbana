@@ -105,6 +105,11 @@ query_share_columns = ("select column_name
                        from information_schema.columns
                        where table_schema = 'preprocess'
                        and table_name = 'iter_2005'
+                       intersect
+                       select column_name 
+                       from information_schema.columns
+                       where table_schema = 'preprocess'
+                       and table_name = 'iter_2000'
                        order by column_name")
 con = Connect2PosgreSQL(config)
 share_columns = get_postgis_query(con, query_share_columns)$column_name
@@ -115,7 +120,10 @@ query_delete = c("drop table if exists grids.censos_rurales")
 create_query = sprintf("CREATE TABLE grids.censos_rurales AS 
                        (%s)
                        UNION 
+                       (%s)
+                       UNION  
                        (%s)",
+                       JoinITERAndGrid(config,share_columns,2000),
                        JoinITERAndGrid(config,share_columns,2005),
                        JoinITERAndGrid(config,share_columns,2010))
 
