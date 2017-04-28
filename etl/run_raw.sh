@@ -29,11 +29,11 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA ml;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA results;"
 
 echo 'Populating raw data...'
-sh raw/ageb_shapefiles/import_ageb_shapefiles.sh
-sh raw/census/import_census.sh
-sh raw/denue/import_denue.sh
-sh raw/geography/import_geography.sh
-sh raw/transportation/import_transportation.sh
+sh raw/import_ageb_shapefiles.sh
+sh raw/import_census.sh
+sh raw/import_denue.sh
+sh raw/import_geography.sh
+sh raw/import_transportation.sh
 
 echo 'Running pre-process'
 sh run_preprocess.sh
