@@ -5,7 +5,7 @@ DB_USER=$(cat '../config.yaml' | shyaml get-value db.user)
 DB_NAME=$(cat '../config.yaml' | shyaml get-value db.database)
 ROOT_PATH=$(cat '../config.yaml' | shyaml get-value db.root)
 
-'Dropping grids schema'
+#'Dropping grids schema'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists grids_250 CASCADE;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA grids_250;"
 
@@ -25,8 +25,11 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "grids/transportation_to_grid.sql"
 echo 'denue to grid'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "grids/denue_to_grid.sql"
 
-echo 'Distances to rural areas'
+echo 'Distancia a localidades rurales'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "grids/loc_rurales_distancia.sql"
 
-echo 'Distance to urban areas'
+echo 'Distancia a areas urbanas'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "grids/zonas_urbanas_distance.sql"
+
+echo 'Distancia centro urbano'
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "grids/centro_urbano_distance.sql"

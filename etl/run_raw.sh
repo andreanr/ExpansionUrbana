@@ -34,6 +34,7 @@ sh raw/import_census.sh
 sh raw/import_denue.sh
 sh raw/import_geography.sh
 sh raw/import_transportation.sh
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "raw/centro_urbano.sql"
 
 echo 'Running pre-process'
 sh run_preprocess.sh

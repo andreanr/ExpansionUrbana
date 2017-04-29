@@ -30,3 +30,6 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_transportation.sql"
 
 echo 'DENUE'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/cut_denue.sql"
+
+echo 'Centro Urbano'
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME < "preprocess/centro_urbano_buffer.sql"
