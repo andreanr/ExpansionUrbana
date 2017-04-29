@@ -14,3 +14,4 @@ EXTRACTED_DATA_FOLDER=$(cat '../config.yaml' | shyaml get-value etl.extracted)
 yes | unzip $RAW_DATA_FOLDER/denue_08_shp.zip -d $EXTRACTED_DATA_FOLDER
 shp2pgsql -s 4326  -d -D -I $EXTRACTED_DATA_FOLDER"/denue_08_shp/conjunto_de_datos/denue_inegi_08_.shp" raw.denue | psql -d $DB_NAME -h $DB_HOST -U $DB_USER
 
+
