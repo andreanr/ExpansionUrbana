@@ -4,11 +4,11 @@
 
 grid_size: 250 # in meters 
 years: ['2000', '2005', '2010'] # years to run
-intersect_percent: 0.75 #range from (0,1]
+intersect_percents: [25, 50, 75, 100]  #range from (0,100]
 
 #------------ FEATURES -------------
 features_table_name: 'features_test'
-labels_table_name: 'labels_75'
+labels_table_name: 'labels'
 
 Features:
     # Aeropuertos

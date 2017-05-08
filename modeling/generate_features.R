@@ -72,18 +72,18 @@ GenerateFeature <- function(config, experiment){
 }
 
 
-GenerateLabels <- function(config, experiment){
-  # From experiment
-  labels_table_name <- experiment$labels_table_name
-  grid_size <- experiment$grid_size
-  intersect_percent <- experiment$intersect_percent
-  
+GenerateLabels <- function(config,
+                           labels_table_name,
+                           grid_size,
+                           intersect_percent){
+
   #Drop table if exists
-  query_drop = sprintf("DROP TABLE IF EXISTS features.%s_%s",
+  query_drop = sprintf("DROP TABLE IF EXISTS features.%s_%s_%s",
                        labels_table_name,
+                       intersect_percent,
                        grid_size)
   
-  query = sprintf("CREATE TABLE features.%s_%s AS (
+  query = sprintf("CREATE TABLE features.%s_%3$s_%s AS (
                   WITH intersect_2000 AS (
 	                    SELECT cell_id,
                              '2000'::TEXT AS year,
@@ -95,7 +95,7 @@ GenerateLabels <- function(config, experiment){
                   ),labels_2000 AS (
                       SELECT cell_id,
                              year,
-                            CASE WHEN  porcentage_ageb_share > %3$s THEN 1 ELSE 0 END AS label
+                            CASE WHEN  porcentage_ageb_share >= %3$s /100.0 THEN 1 ELSE 0 END AS label
                       FROM intersect_2000
                   ), intersect_2005 AS (
                       SELECT cell_id,
@@ -108,7 +108,7 @@ GenerateLabels <- function(config, experiment){
                   ), labels_2005 AS (
                       SELECT cell_id,
                               year,
-                              CASE WHEN  porcentage_ageb_share > %3$s THEN 1 ELSE 0 END AS label
+                              CASE WHEN  porcentage_ageb_share >= %3$s /100.0 THEN 1 ELSE 0 END AS label
                       FROM intersect_2005
                   ) SELECT * FROM labels_2000
                       UNION
@@ -117,8 +117,9 @@ GenerateLabels <- function(config, experiment){
                   grid_size,
                   intersect_percent)
   
-  query_index = sprintf("CREATE INDEX ON features.%s_%s (year)",
+  query_index = sprintf("CREATE INDEX ON features.%s_%s_%s (year)",
                         labels_table_name,
+                        intersect_percent,
                          grid_size)
   
   # connect to db
@@ -136,12 +137,22 @@ config = yaml.load_file("../config.yaml")
 
 #Read experiment
 experiment = yaml.load_file("../experiment.yaml")
+# From experiment
+labels_table_name <- experiment$labels_table_name
+grid_size <- experiment$grid_size
+intersect_percent <- experiment$intersect_percents
 
 # Generate features table
 GenerateFeature(config, experiment)
 
 # Generate labels table
-GenerateLabels(config, experiment)
+for (i in 1:length(intersect_percent)){
+  GenerateLabels(config,
+                 labels_table_name,
+                 grid_size,
+                 intersect_percent[i])
+}
+
 
 
 
