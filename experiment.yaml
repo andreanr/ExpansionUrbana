@@ -4,7 +4,7 @@
 
 grid_size: 250 # in meters 
 years: ['2000', '2005', '2010'] # years to run
-intersect_percents: [25, 50, 75, 100]  #range from (0,100]
+intersect_percent: 25  #range from (0,100]
 
 #------------ FEATURES -------------
 features_table_name: 'features_test'

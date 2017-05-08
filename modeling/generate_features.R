@@ -72,11 +72,13 @@ GenerateFeature <- function(config, experiment){
 }
 
 
-GenerateLabels <- function(config,
-                           labels_table_name,
-                           grid_size,
-                           intersect_percent){
+GenerateLabels <- function(config,experiment){
 
+  # From experiment
+  labels_table_name <- experiment$labels_table_name
+  grid_size <- experiment$grid_size
+  intersect_percent <- experiment$intersect_percents
+  
   #Drop table if exists
   query_drop = sprintf("DROP TABLE IF EXISTS features.%s_%s_%s",
                        labels_table_name,
@@ -146,12 +148,7 @@ intersect_percent <- experiment$intersect_percents
 GenerateFeature(config, experiment)
 
 # Generate labels table
-for (i in 1:length(intersect_percent)){
-  GenerateLabels(config,
-                 labels_table_name,
-                 grid_size,
-                 intersect_percent[i])
-}
+GenerateLabels(config,experiment)
 
 
 
