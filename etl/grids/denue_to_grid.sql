@@ -11,8 +11,7 @@ CREATE TABLE grids_250.denue as (
 	)
 	SELECT 
 		cell_id,
-		year_alta,
-		min(CASE WHEN per_ocu IN ('0 a 5 personas', '6 a 10 personas') 
+		min(CASE WHEN per_ocu IN ('0 a 5 personas', '6 a 10 personas')
 			THEN st_distance(st_centroid(cell), ST_ClosestPoint(geom, st_centroid(cell))) / 1000.0
 			ELSE NULL END) AS unidades_economicas_micro_distancia_km,
 		min(CASE WHEN per_ocu IN ('11 a 30 personas', '31 a 50 personas')
@@ -25,7 +24,7 @@ CREATE TABLE grids_250.denue as (
 			THEN st_distance(st_centroid(cell), ST_ClosestPoint(geom, st_centroid(cell))) / 1000.0
 			ELSE NULL END) AS unidades_economicas_grandes_distancia_km
 	FROM grids_250.grid, denue_grouped
-	GROUP BY cell_id, year_alta
+	GROUP BY cell_id
 );
 
-CREATE INDEX ON grids_250.denue (cell_id, year_alta);
+CREATE INDEX ON grids_250.denue (cell_id);

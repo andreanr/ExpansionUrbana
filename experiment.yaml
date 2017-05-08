@@ -1,0 +1,102 @@
+############################
+####### EXPERIMENT #########
+############################
+
+grid_size: 250 # in meters 
+years: ['2000', '2005', '2010'] # years to run
+
+#------------ FEATURES -------------
+features_table_name: 'features_test'
+Features:
+    # Aeropuertos
+    aeropuerto_distancia_km: True
+    # Carreteras
+    cuota_distancia_km: False
+    libre_distancia_km: False
+    carretera_distancia_km: True
+    calle_distancia_km: True
+    avenida_distancia_km: True
+    carriles_1_distancia_km: False
+    carriles_2_distancia_km: False
+    carriles_4_distancia_km: False
+    # Centro Urbano
+    centro_urbano_distancia_km: True
+    # DENUE
+    unidades_economicas_micro_distancia_km: True
+    unidades_economicas_pequenas_distancia_km: True
+    unidades_economicas_medianas_distancia_km: True
+    unidades_economicas_grandes_distancia_km: True
+    # Localidades rurales
+    loc_rurales_distancia_min: True
+    # Pendiente 
+    min_slope_pct: False
+    max_slope_pct: True
+    mean_slope_pct: False
+    stddev_slope_pct: True
+    min_slope_degrees: False
+    max_slope_degrees: False
+    mean_slope_degrees: False
+    stddev_slope_degrees: False
+    # Vias ferreas
+    via_ferrea_distancia_km: True
+    # zonas urbanas
+    zona_urbana_distancia_min: True
+    # censos
+    grado_promedio_escolaridad: True
+    hogares_jefe_femenino: True
+    hogares_jefe_masculino: True
+    ocupantes_viviendas: True
+    poblacion_0_a_14: True
+    poblacion_12_mas: True
+    poblacion_15_a_49_femenina: True
+    poblacion_15_mas: True
+    poblacion_15_mas_analfabeta: True
+    poblacion_15_mas_femenina: True
+    poblacion_15_mas_masculina: True
+    poblacion_15_mas_sin_escolaridad: True
+    poblacion_18_mas: True
+    poblacion_18_mas_femenina: True
+    poblacion_18_mas_masculina: True
+    poblacion_5_mas: True
+    poblacion_5_mas_femenina: True
+    poblacion_5_mas_lengua_indigena: True
+    poblacion_5_mas_lengua_indigena_y_espanol: True
+    poblacion_5_mas_lengua_indigna_no_espanol: True
+    poblacion_5_mas_residente: True
+    poblacion_5_mas_residente_otra_entidad: True
+    poblacion_60_mas: True
+    poblacion_60_mas_femenina: True
+    poblacion_60_mas_masculina: True
+    poblacion_65_mas: True
+    poblacion_derechohabbiente_salud: True
+    poblacion_femenina: True
+    poblacion_hogares: True
+    poblacion_hogares_jefe_femenino: True
+    poblacion_hogares_jefe_masculino: True
+    poblacion_masculina: True
+    poblacion_sin_derechohabiente_salud: True
+    poblacion_total: True
+    promedio_hijos_nacidos_vivos: True
+    promedio_ocupantes_cuarto_viviendas: True
+    promedio_ocupantes_viviendas: True
+    promedio_relacion_hombres_mujeres: True
+    total_hogares: True
+    viviendas_1_cuarto: True
+    viviendas_1_dormitorio: True
+    viviendas_agua_entubada: True
+    viviendas_computadora: True
+    viviendas_con_servicios: True
+    viviendas_drenaje: True
+    viviendas_electricidad: True
+    viviendas_excusado: True
+    viviendas_habitadas: True
+    viviendas_lavadora: True
+    viviendas_no_drenaje: True
+    viviendas_particulares_habitadas: True
+    viviendas_refrigerador: True
+    viviendas_sin_bienes: True
+    viviendas_tv: True
+
+
+
+
