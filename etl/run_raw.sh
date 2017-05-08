@@ -14,8 +14,7 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists preprocess CA
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists clean CASCADE;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists grids_250 CASCADE;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists grids_500 CASCADE;"
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists semantic CASCADE;"
-psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists ml CASCADE;"
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists features CASCADE;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists results CASCADE;"
 
 echo 'Creating schemas...'

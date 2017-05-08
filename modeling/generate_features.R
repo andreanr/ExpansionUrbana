@@ -69,9 +69,65 @@ GenerateFeature <- function(config, experiment){
   dbSendQuery(con, query)
   dbSendQuery(con, query_index)
   dbDisconnect(con)
-  
 }
 
+
+GenerateLabels <- function(config, experiment){
+  # From experiment
+  labels_table_name <- experiment$labels_table_name
+  grid_size <- experiment$grid_size
+  intersect_percent <- experiment$intersect_percent
+  
+  #Drop table if exists
+  query_drop = sprintf("DROP TABLE IF EXISTS features.%s_%s",
+                       labels_table_name,
+                       grid_size)
+  
+  query = sprintf("CREATE TABLE features.%s_%s AS (
+                  WITH intersect_2000 AS (
+	                    SELECT cell_id,
+                             '2000'::TEXT AS year,
+                             sum(st_area(ST_Intersection(geom, cell)) / st_area(cell)) as porcentage_ageb_share
+                      FROM grids_250.grid
+                      LEFT JOIN preprocess.ageb_zm_2005
+                      ON st_intersects(cell, geom)
+                      GROUP BY cell_id
+                  ),labels_2000 AS (
+                      SELECT cell_id,
+                             year,
+                            CASE WHEN  porcentage_ageb_share > %3$s THEN 1 ELSE 0 END AS label
+                      FROM intersect_2000
+                  ), intersect_2005 AS (
+                      SELECT cell_id,
+                             '2005'::TEXT AS year,
+                              sum(st_area(ST_Intersection(geom, cell)) / st_area(cell)) as porcentage_ageb_share
+                      FROM grids_250.grid
+                      LEFT JOIN preprocess.ageb_zm_2010
+                      ON st_intersects(cell, geom)
+                      GROUP BY cell_id
+                  ), labels_2005 AS (
+                      SELECT cell_id,
+                              year,
+                              CASE WHEN  porcentage_ageb_share > %3$s THEN 1 ELSE 0 END AS label
+                      FROM intersect_2005
+                  ) SELECT * FROM labels_2000
+                      UNION
+                    SELECT * FROM labels_2005 )",
+                  labels_table_name,
+                  grid_size,
+                  intersect_percent)
+  
+  query_index = sprintf("CREATE INDEX ON features.%s_%s (year)",
+                        labels_table_name,
+                         grid_size)
+  
+  # connect to db
+  con = Connect2PosgreSQL(config)
+  dbSendQuery(con, query_drop)
+  dbSendQuery(con, query)
+  dbSendQuery(con, query_index)
+  dbDisconnect(con)
+}
 
 
 #--------------------------------------------------
@@ -83,3 +139,9 @@ experiment = yaml.load_file("../experiment.yaml")
 
 # Generate features table
 GenerateFeature(config, experiment)
+
+# Generate labels table
+GenerateLabels(config, experiment)
+
+
+
