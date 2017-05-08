@@ -77,7 +77,7 @@ GenerateLabels <- function(config,experiment){
   # From experiment
   labels_table_name <- experiment$labels_table_name
   grid_size <- experiment$grid_size
-  intersect_percent <- experiment$intersect_percents
+  intersect_percent <- experiment$intersect_percent
   
   #Drop table if exists
   query_drop = sprintf("DROP TABLE IF EXISTS features.%s_%s_%s",
@@ -139,10 +139,6 @@ config = yaml.load_file("../config.yaml")
 
 #Read experiment
 experiment = yaml.load_file("../experiment.yaml")
-# From experiment
-labels_table_name <- experiment$labels_table_name
-grid_size <- experiment$grid_size
-intersect_percent <- experiment$intersect_percents
 
 # Generate features table
 GenerateFeature(config, experiment)
