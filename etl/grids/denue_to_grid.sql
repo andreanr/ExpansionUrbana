@@ -1,7 +1,7 @@
 
-DROP TABLE IF EXISTS grids_250.denue;
+DROP TABLE IF EXISTS hex_grids_250.denue;
 
-CREATE TABLE grids_250.denue as (
+CREATE TABLE hex_grids_250.denue as (
 	WITH denue_grouped AS (
 		SELECT year_alta, 
 		per_ocu, 
@@ -23,8 +23,8 @@ CREATE TABLE grids_250.denue as (
 		min(CASE WHEN per_ocu like ('251%')
 			THEN st_distance(st_centroid(cell), ST_ClosestPoint(geom, st_centroid(cell))) / 1000.0
 			ELSE NULL END) AS unidades_economicas_grandes_distancia_km
-	FROM grids_250.grid, denue_grouped
+	FROM hex_grids_250.grid, denue_grouped
 	GROUP BY cell_id
 );
 
-CREATE INDEX ON grids_250.denue (cell_id);
+CREATE INDEX ON hex_grids_250.denue (cell_id);

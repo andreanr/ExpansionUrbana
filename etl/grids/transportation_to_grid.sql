@@ -1,25 +1,25 @@
 
-DROP TABLE IF EXISTS grids_250.aeropuertos;
-CREATE TABLE grids_250.aeropuertos as (
+DROP TABLE IF EXISTS hex_grids_250.aeropuertos;
+CREATE TABLE hex_grids_250.aeropuertos as (
 	SELECT cell_id,
 	       ST_Distance(geom, st_centroid(cell)) /1000 AS aeropuerto_distancia_km
-	FROM grids_250.grid, preprocess.aeropuertos
+	FROM hex_grids_250.grid, preprocess.aeropuertos
   );
 
-CREATE INDEX ON grids_250.aeropuertos (cell_id);
+CREATE INDEX ON hex_grids_250.aeropuertos (cell_id);
 
-DROP TABLE IF EXISTS grids_250.vias_ferreas;
-CREATE TABLE grids_250.vias_ferreas as (
+DROP TABLE IF EXISTS hex_grids_250.vias_ferreas;
+CREATE TABLE hex_grids_250.vias_ferreas as (
 	SELECT cell_id,
 	       min(ST_Distance(geom, st_centroid(cell)) /1000) AS via_ferrea_distancia_km
-	FROM grids_250.grid, preprocess.vias_ferreas
+	FROM hex_grids_250.grid, preprocess.vias_ferreas
 	GROUP BY cell_id
 );
 
-CREATE INDEX ON grids_250.vias_ferreas (cell_id);
+CREATE INDEX ON hex_grids_250.vias_ferreas (cell_id);
 
-DROP TABLE IF EXISTS grids_250.carreteras;
-CREATE TABLE grids_250.carreteras as (
+DROP TABLE IF EXISTS hex_grids_250.carreteras;
+CREATE TABLE hex_grids_250.carreteras as (
 	SELECT cell_id,
 	       min(CASE WHEN derecho_transito = 'CUOTA' 
 		   THEN ST_Distance(geom, st_centroid(cell)) /1000.0 
@@ -45,10 +45,10 @@ CREATE TABLE grids_250.carreteras as (
 	       min(CASE WHEN numero_carriles = '4'
 		   THEN ST_Distance(geom, st_centroid(cell)) /1000.0 
 		   ELSE NULL END) AS carriles_4_distancia_km
-	FROM grids_250.grid, preprocess.carreteras
+	FROM hex_grids_250.grid, preprocess.carreteras
 	GROUP BY cell_id
 ); 
   
-CREATE INDEX ON grids_250.carreteras (cell_id);
+CREATE INDEX ON hex_grids_250.carreteras (cell_id);
 	       
 	       

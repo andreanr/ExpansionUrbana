@@ -3,11 +3,11 @@
 --##############
 
 -- slope in percentage
-CREATE TABLE grids_250.slope AS (
+CREATE TABLE hex_grids_250.slope AS (
     WITH clip_slope_pct AS (
         SELECT cell_id,
 	       ST_SummaryStats(st_union(st_clip(rast_percent, 1, cell, True))) AS stats_pct
-	FROM grids_250.grid
+	FROM hex_grids_250.grid
 	LEFT JOIN preprocess.slope
 	ON ST_Intersects(rast_percent, cell)
 	GROUP BY cell_id
@@ -15,7 +15,7 @@ CREATE TABLE grids_250.slope AS (
     clip_slope_degrees AS (
 	SELECT cell_id,
 		ST_SummaryStats(st_union(st_clip(rast_degrees, 1, cell, True))) AS stats_degrees
-	FROM grids_250.grid
+	FROM hex_grids_250.grid
 	LEFT JOIN preprocess.slope
 	ON ST_Intersects(rast_degrees, cell)
 	GROUP BY cell_id
@@ -34,6 +34,6 @@ CREATE TABLE grids_250.slope AS (
 	USING (cell_id)
 	);
 
-CREATE INDEX ON grids_250.slope_percentages (cell_id);
+CREATE INDEX ON hex_grids_250.slope_percentages (cell_id);
 
 

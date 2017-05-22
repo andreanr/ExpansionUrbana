@@ -2,12 +2,12 @@
 ####### EXPERIMENT #########
 ############################
 
-grid_size: 250 # in meters 
+grid_size: 'hex_grid_1000' # in meters 
 years: ['2000', '2005', '2010'] # years to run
 intersect_percent: 25  #range from (0,100]
 
 #------------ FEATURES -------------
-features_table_name: 'features_test'
+features_table_name: 'features'
 labels_table_name: 'labels'
 
 Features:
@@ -44,6 +44,8 @@ Features:
     via_ferrea_distancia_km: True
     # zonas urbanas
     zona_urbana_distancia_min: True
+    # Numero de vecinos urbanos
+    num_vecinos_urbanos: True
     # censos
     grado_promedio_escolaridad: True
     hogares_jefe_femenino: True
@@ -100,6 +102,17 @@ Features:
     viviendas_sin_bienes: True
     viviendas_tv: True
 
-
-
-
+Models:
+    RandomForest:
+        n_estimators: [1000,5000,10000] #[50,100, 1000, 10000, 50000]
+        max_depth: [2,5,10] #[100, 5, 10, 50] 
+        max_features: ['log2'] # ['log2', 2, 4, 8, 16, "auto"]
+        criterion: ['gini'] # ['entropy']
+        min_samples_split: [2,5,10] #[2, 5, 10]
+    ExtraTrees:
+        n_estimators: [1000,5000,10000] #[ 25, 50, 100, 1000, 10000, 50000, 100000]
+        max_depth: [2,5,10] #[5, 10, 50, 100 ]
+        max_features: ['log2'] # [4, 8, 16, "auto"]
+        criterion: ['gini'] #, 'entropy']
+        min_samples_split: [2,5,10] #[2, 5, 10] #, 5, 10]
+        random_state: [2193]

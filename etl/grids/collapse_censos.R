@@ -22,7 +22,7 @@ ColumnNames <- function(config, table_name){
   con = Connect2PosgreSQL(config)
   query = sprintf( "SELECT column_name
                    FROM information_schema.columns
-                   WHERE table_schema = 'grids_250'
+                   WHERE table_schema = 'hex_grids_250'
                    AND table_name = '%s'
                    AND column_name not in
                    ('clave_ageb','geom','gid', 'year', 'cell_id')", 
@@ -60,11 +60,11 @@ CollapseCensos <- function(config){
   } # end loop
   selects = paste(selects, collapse = ', ')
   
-  query_drop = c("DROP TABLE IF EXISTS grids_250.censos")
-  query = sprintf("CREATE TABLE grids_250.censos AS (
+  query_drop = c("DROP TABLE IF EXISTS hex_grids_250.censos")
+  query = sprintf("CREATE TABLE hex_grids_250.censos AS (
                   SELECT cell_id, year, %s
-                  FROM grids_250.censos_urbanos as c 
-                  JOIN grids_250.censos_rurales as r 
+                  FROM hex_grids_250.censos_urbanos as c 
+                  JOIN hex_grids_250.censos_rurales as r 
                   USING (cell_id, year))", selects)
   
   con = Connect2PosgreSQL(config)
@@ -79,3 +79,4 @@ config = yaml.load_file("../../config.yaml")
 
 # Create collapse census
 CollapseCensos(config)
+

@@ -54,12 +54,12 @@ JoinITERAndGrid <- function(config, columns_to_use, year){
   agg_avg_str = paste(sprintf("avg(%s::float) as %s", cols_avg, cols_avg), collapse= ', ')
   
   # Query delete if exist
-  #query_delete = sprintf("drop table if exists grids_250.%s", table_name)
+  #query_delete = sprintf("drop table if exists hex_grids_250.%s", table_name)
   ## Query that creates the intersection 
   query_intersection = sprintf("select
                                cell_id,
                                %s, %s 
-                               from grids_250.grid
+                               from hex_grids_250.grid
                                left join preprocess.%s
                                on st_contains(cell, geom)", 
                                cols_totals_str,
@@ -116,8 +116,8 @@ share_columns = get_postgis_query(con, query_share_columns)$column_name
 dbDisconnect(con)
 
 # Join census and grid
-query_delete = c("drop table if exists grids_250.censos_rurales")
-create_query = sprintf("CREATE TABLE grids_250.censos_rurales AS 
+query_delete = c("drop table if exists hex_grids_250.censos_rurales")
+create_query = sprintf("CREATE TABLE hex_grids_250.censos_rurales AS 
                        (%s)
                        UNION 
                        (%s)

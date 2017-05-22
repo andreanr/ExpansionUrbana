@@ -40,22 +40,24 @@ GenerateFeature <- function(config, experiment){
                             collapse = ', ')
   query = sprintf("CREATE TABLE  features.%s_%s AS (
                   SELECT cell_id, year, %s
-                  FROM grids_250.aeropuertos
-                  JOIN grids_250.carreteras
+                  FROM hex_grids_250.aeropuertos
+                  JOIN hex_grids_250.carreteras
                   USING (cell_id)
-                  JOIN grids_250.censos
+                  JOIN hex_grids_250.censos
                   USING (cell_id)
-                  JOIN grids_250.centro_urbano
+                  JOIN hex_grids_250.centro_urbano
                   USING (cell_id)
-                  JOIN grids_250.denue
+                  JOIN hex_grids_250.denue
                   USING (cell_id)
-                  JOIN grids_250.localidades_rurales_distance
+                  JOIN hex_grids_250.localidades_rurales_distance
                   USING (cell_id, year)
-                  JOIN grids_250.slope
+                  JOIN hex_grids_250.slope
                   USING (cell_id)
-                  JOIN grids_250.vias_ferreas
+                  JOIN hex_grids_250.vias_ferreas
                   USING (cell_id)
-                  JOIN grids_250.zonas_urbanas_distancia
+                  JOIN hex_grids_250.zonas_urbanas_distancia
+                  USING (cell_id, year)
+                  JOIN hex_grids_250.vecinos_urbanos
                   USING (cell_id, year)
                 ) ", features_table_name, 
                      grid_size,
@@ -90,7 +92,7 @@ GenerateLabels <- function(config,experiment){
 	                    SELECT cell_id,
                              '2000'::TEXT AS year,
                              sum(st_area(ST_Intersection(geom, cell)) / st_area(cell)) as porcentage_ageb_share
-                      FROM grids_250.grid
+                      FROM hex_grids_250.grid
                       LEFT JOIN preprocess.ageb_zm_2005
                       ON st_intersects(cell, geom)
                       GROUP BY cell_id
@@ -103,7 +105,7 @@ GenerateLabels <- function(config,experiment){
                       SELECT cell_id,
                              '2005'::TEXT AS year,
                               sum(st_area(ST_Intersection(geom, cell)) / st_area(cell)) as porcentage_ageb_share
-                      FROM grids_250.grid
+                      FROM hex_grids_250.grid
                       LEFT JOIN preprocess.ageb_zm_2010
                       ON st_intersects(cell, geom)
                       GROUP BY cell_id
