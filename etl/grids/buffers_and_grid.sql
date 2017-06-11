@@ -36,9 +36,9 @@ select  st_buffer(st_multi(st_union(geom)),7000) as buffer_geom from preprocess.
 --------------------------------------------------------------------------------------------
 ------------------------------------ Generate Hexagons -------------------------------------
 --------------------------------------------------------------------------------------------
-DROP table if EXISTS hex_grids_250.grid;
-CREATE TABLE hex_grids_250.grid (cell_id serial not null primary key);
-SELECT addgeometrycolumn('hex_grids_250', 'grid','cell', 0, 'POLYGON', 2);
+DROP table if EXISTS hex_grid_250.grid;
+CREATE TABLE hex_grid_250.grid (cell_id serial not null primary key);
+SELECT addgeometrycolumn('hex_grid_250', 'grid','cell', 0, 'POLYGON', 2);
 
 DROP FUNCTION genhexagons(float, float, float, float, float);
 CREATE OR REPLACE FUNCTION genhexagons(width float, xmin float,ymin  float,xmax float,ymax float  )
@@ -61,7 +61,7 @@ declare
                                         0 || ' ' || 0     ||
                                 '))';
 BEGIN
-    INSERT INTO hex_grids_250.grid (cell) SELECT st_translate(cell, x_series*(2*a+c)+xmin, y_series*(2*(a +c))+ymin)
+    INSERT INTO hex_grid_250.grid (cell) SELECT st_translate(cell, x_series*(2*a+c)+xmin, y_series*(2*(a +c))+ymin)
     from generate_series(0, ncol::int , 1) as x_series,
     generate_series(0, nrow::int,1 ) as y_series,
     (
@@ -69,7 +69,7 @@ BEGIN
        UNION
        SELECT ST_Translate(polygon_string::geometry, b , a+c)  as cell
     ) as two_hex;
-    ALTER TABLE hex_grids_250.grid
+    ALTER TABLE hex_grid_250.grid
     ALTER COLUMN cell TYPE geometry(Polygon, 4486)
     USING ST_SetSRID(cell,4486);
     RETURN NULL;

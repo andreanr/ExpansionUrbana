@@ -49,7 +49,7 @@ JoinCensusAndGrid <- function(config, columns_to_use, year){
                             cell_id,
                             st_area(ST_Intersection(geom, cell)) / st_area(geom) as porcentage_ageb_share,
                             %s, %s 
-                      from hex_grids_250.grid
+                      from hex_grid_250.grid
                       left join preprocess.%s
                       on st_intersects(cell, geom)", 
                                  cols_totals_str,
@@ -112,8 +112,8 @@ share_columns = get_postgis_query(con, query_share_columns)$column_name
 dbDisconnect(con)
 
 # Join census and grid
-query_delete = c("drop table if exists hex_grids_250.censos_urbanos")
-create_query = sprintf("CREATE TABLE hex_grids_250.censos_urbanos AS 
+query_delete = c("drop table if exists hex_grid_250.censos_urbanos")
+create_query = sprintf("CREATE TABLE hex_grid_250.censos_urbanos AS 
                  (%s)
                  UNION 
                  (%s)
