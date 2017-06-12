@@ -75,3 +75,18 @@ CREATE TABLE preprocess.ageb_zm_2010 AS
        WHERE mza = '000';
 
 CREATE INDEX ON preprocess.ageb_zm_2010 USING GIST (geom);
+
+
+-- Urbano 2015
+DROP TABLE IF EXISTS preprocess.urbano_2015;
+CREATE TABLE preprocess.urbano_2015 AS
+    WITH transform_urb as (
+        SELECT gid,
+               st_transform(geom, 4326) as geom
+        from raw.urbano_2015
+        )
+       SELECT urb.gid,
+              st_transform(urb.geom, 4486) as geom
+       FROM transform_urb AS urb
+       JOIN preprocess.metropolitan_area AS metro
+       ON st_within(urb.geom, metro.geom);
