@@ -22,3 +22,11 @@ CREATE TABLE results.predictions (
   score         REAL,
   label         BOOL
 );
+
+-- feature importance table
+CREATE TABLE results.feature_importances (
+  model_id             INT REFERENCES results.models (model_id),
+  feature              TEXT,
+  feature_importance   REAL,
+  rank_abs             INT
+);
