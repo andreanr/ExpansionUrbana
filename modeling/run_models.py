@@ -7,20 +7,24 @@ import numpy as np
 import psycopg2
 from sklearn import (svm, ensemble, tree,
                      linear_model, neighbors, naive_bayes)
-import utils
+from costcla.models import (CostSensitiveRandomForestClassifier,
+                            CostSensitiveLogisticRegression)
 
+import utils
+import scoring
 
 def gen_models_to_run(experiment):
     # get values
     year_train = experiment['year_train'][0]
     features = utils.get_features(experiment)
     grid_size = experiment['grid_size']
+    costs = experiment['costos']
     features_table_prefix = experiment['features_table_name']
     labels_table_prefix = experiment['labels_table_name']
     intersect_percent = experiment['intersect_percent']
 
     # get data
-    train_x, train_y = utils.get_data(year_train,
+    train_x, train_y, train_costs = utils.get_data(year_train,
                                       features,
                                       grid_size,
                                       features_table_prefix,
@@ -44,6 +48,7 @@ def gen_models_to_run(experiment):
             print('training')
             modelobj, importances = train(train_x,
                                           train_y,
+                                          train_costs,
                                           model,
                                           parameters,
                                           2)
@@ -55,29 +60,35 @@ def gen_models_to_run(experiment):
                                    year_train,
                                    grid_size,
                                    intersect_percent,
+                                   costs,
                                    experiment['model_comment'])
 
             print('Model id: {}'.format(model_id))
             utils.store_importances(model_id, features, importances)
 
-            print('testing')
             for year_test in experiment['year_tests']:
+                print('testing')
                 print('For year {}'.format(year_test))
-                test_x, test_y  = utils.get_data(year_test,
-                                                 features,
-                                                 grid_size,
-                                                 features_table_prefix,
-                                                 labels_table_prefix,
-                                                 intersect_percent)
+                test_x, test_y, test_costs  = utils.get_data(year_test,
+                                                         features,
+                                                         grid_size,
+                                                         features_table_prefix,
+                                                         labels_table_prefix,
+                                                         intersect_percent)
                 test_x['scores'] = predict_model(modelobj, test_x)
                 utils.store_predictions(model_id,
                                         year_test,
                                         test_x.index,
                                         test_x['scores'],
                                         test_y)
-                print('Cool')
-                print('--------------------------')
-                print('--------------------------')
+                print('scoring')
+                metrics = scoring.calculate_all_evaluation_metrics(test_y.tolist(),
+                                                                   test_x['scores'],
+                                                                   test_costs)
+                utils.store_evaluations(model_id, year_test, metrics)
+            print('Cool')
+            print('--------------------------')
+            print('--------------------------')
 
     print('Done!')
 
@@ -106,9 +117,12 @@ def get_feature_importances(model):
     return None
 
 
-def train(train_x, train_y, model, parameters, n_cores):
+def train(train_x, train_y, train_costs, model, parameters, n_cores):
     modelobj = define_model(model, parameters, n_cores)
-    modelobj.fit(train_x, train_y)
+    if 'CostSensitive' in model:
+        modelobj.fit(train_x, train_y, train_costs)
+    else:
+        modelobj.fit(train_x, train_y)
 
     importances = get_feature_importances(modelobj)
     return modelobj, importances
@@ -186,6 +200,20 @@ def define_model(model, parameters, n_cores):
             weights=parameters['weights'],
             algorithm=parameters['algorithm'],
             n_jobs=n_cores)
+
+    elif model == 'CostSensitiveRandomForest':
+        return CostSensitiveRandomForestClassifier(
+            n_estimators=parameters['n_estimators'],
+            combination=paramters['combination'],
+            max_features=paramerers['max_features'],
+            pruned=parameters['pruned'])
+
+    elif model == 'CostSensitiveLogisticRegression':
+        return CostSensitiveLogisticRegression(
+            C=parameters['C'],
+            max_iter=parameters['max_iter'],
+            random_state=parameters['random_state'],
+            solver=parameters['solver'])
 
     else:
         raise ConfigError("Unsupported model {}".format(model))

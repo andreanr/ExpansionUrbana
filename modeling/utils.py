@@ -66,7 +66,8 @@ def get_data(year,
                                           intersect_percent,
                                           grid_size)
 
-    query = ("""SELECT cell_id, {features}, label::bool
+    query = ("""SELECT cell_id, {features}, label::bool,
+                CFP, CFN, CTP, CTN
                 FROM  features.{features_table_name}
                 JOIN features.{labels_table_name}
                 USING (cell_id, year)
@@ -74,6 +75,8 @@ def get_data(year,
                 USING (cell_id)
                 JOIN preprocess.buffer_{year}
                 ON st_intersects(cell, buffer_geom)
+                LEFT JOIN features.costs_{grid_size}
+                USING (cell_id, year)
                  WHERE year = '{year}'"""
                 .format(features=", ".join(features),
                         features_table_name=features_table_name,
@@ -84,7 +87,8 @@ def get_data(year,
     db_engine = get_connection()
     data = pd.read_sql(query, db_engine)
     data.set_index('cell_id', inplace=True)
-    return data.ix[:, data.columns != 'label'], data['label']
+    costs = data[['cfp','cfn', 'ctp', 'ctn']].as_matrix()
+    return data.ix[:, ~data.columns.isin(['label', 'ctp', 'ctn', 'cfp', 'cfn'])], data['label'], costs
 
 
 def store_train(timestamp,
@@ -94,6 +98,7 @@ def store_train(timestamp,
                 year_train,
                 grid_size,
                 intersect_percent,
+                costs,
                 model_comment):
 
     query = (""" INSERT INTO results.models (run_time,
@@ -103,6 +108,7 @@ def store_train(timestamp,
                                              year_train,
                                              grid_size,
                                              intersect_percent,
+                                             costs,
                                              model_comment)
                 VALUES ('{run_time}'::TIMESTAMP,
                         '{model_type}',
@@ -111,6 +117,7 @@ def store_train(timestamp,
                          '{year_train}',
                          '{grid_size}',
                          {intersect_percent},
+                         '{costs}'::jsonb,
                          '{model_comment}') """.format(run_time=timestamp,
                                                       model_type=model,
                                                       model_parameters=json.dumps(parameters),
@@ -118,6 +125,7 @@ def store_train(timestamp,
                                                       year_train=year_train,
                                                       grid_size=grid_size,
                                                       intersect_percent=intersect_percent,
+                                                      costs=json.dumps(costs),
                                                       model_comment=model_comment))
     db_conn = get_connection().raw_connection()
     cur = db_conn.cursor()
@@ -160,6 +168,7 @@ def store_predictions(model_id,
                                           "cell_id": cell_id,
                                           "score": scores,
                                           "label": test_y})
+    dataframe_for_insert['score'] = dataframe_for_insert['score'].apply(lambda x: round(x,5))
 
     db_engine = get_connection()
     dataframe_for_insert.to_sql("predictions",
@@ -168,3 +177,36 @@ def store_predictions(model_id,
                                 schema="results",
                                 index=False )
     return True
+
+
+def store_evaluations(model_id, year_test, metrics):
+    db_conn = get_connection().raw_connection()
+    for key in metrics:
+        evaluation = metrics[key]
+        metric = key.split('|')[0]
+        try:
+            metric_cutoff = key.split('|')[1]
+            if metric_cutoff == '':
+                metric_cutoff.replace('', None)
+            else:
+                pass
+        except:
+            metric_cutoff = None
+
+        # store
+        if metric_cutoff is None:
+            metric_cutoff = 'Null'
+        query = ("""INSERT INTO results.evaluations(model_id,
+                                                    year_test,
+                                                    metric,
+                                                    cutoff,
+                                                    value)
+                   VALUES( {0}, {1}, '{2}', {3}, {4}) """
+                   .format( model_id,
+                            year_test,
+                            metric,
+                            metric_cutoff,
+                            evaluation ))
+
+        db_conn.cursor().execute(query)
+        db_conn.commit()

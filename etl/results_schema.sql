@@ -10,7 +10,8 @@ CREATE TABLE results.models (
   features          TEXT[],
   year_train        VARCHAR(4),
   grid_size         TEXT,
-  intersect_percent INT, 
+  intersect_percent INT,
+  costs             JSONB,
   model_comment     TEXT
 );
 
@@ -29,4 +30,13 @@ CREATE TABLE results.feature_importances (
   feature              TEXT,
   feature_importance   REAL,
   rank_abs             INT
+);
+
+-- evaluations table
+CREATE TABLE results.evaluations (
+  model_id   INT REFERENCES results.models (model_id),
+  year_test  INT,
+  metric     TEXT,
+  cutoff     TEXT,
+  value      REAL
 );
