@@ -13,6 +13,15 @@ model_comment: 'test'
 features_table_name: 'features'
 labels_table_name: 'labels'
 
+costos:
+    costo_calles: 50
+    costo_unidades_economicas_pequenas: 20
+    costo_unidades_economicas_medianas: 50
+    costo_transporte: 100
+    interes_antes: 0.5 # costo entre cero y uno
+    interes_despues: 2 # costo de construir despues
+
+
 Features:
     # Aeropuertos
     aeropuerto_distancia_km: True
@@ -105,23 +114,33 @@ Features:
     viviendas_sin_bienes: True
     viviendas_tv: True
 
-model: ['RandomForest'] #, 'ExtraTrees', 'LogisticRegression']
+model: ['ExtraTrees'] #, 'LogisticRegression']
 parameters:
     RandomForest:
-        n_estimators: [10, 50, 100, 500, 1000, 5000] # [1000,5000,10000] #[50,100, 1000, 10000, 50000]
+        n_estimators: [10, 50, 100, 500, 1000, 5000, 10000]
         max_depth: [5, 10, 50] #,5,10] #[100, 5, 10, 50] 
         max_features: ['log2', 'sqrt'] # ['log2', 2, 4, 8, 16, "auto"]
         criterion: ['gini', 'entropy']
         min_samples_split: [2,5,10] #[2,5,10]
         random_state: [2193]
     ExtraTrees:
-        n_estimators: [1000,5000,10000] #[ 25, 50, 100, 1000, 10000, 50000, 100000]
+        n_estimators: [10, 50, 100, 500, 1000, 5000,10000] #[ 25, 50, 100, 1000, 10000, 50000, 100000]
         max_depth: [2,5,10] #[5, 10, 50, 100 ]
-        max_features: ['log2'] # [4, 8, 16, "auto"]
-        criterion: ['gini'] #, 'entropy']
+        max_features: ['log2', 'sqrt'] # [4, 8, 16, "auto"]
+        criterion: ['gini', 'entropy'] #, 'entropy']
         min_samples_split: [2,5,10] #[2, 5, 10] #, 5, 10]
         random_state: [2193]
     LogisticRegression:
-        C: [ 0.001, 0.01, 1]  # [1, 10]
+        C_reg: [ 0.001, 0.01, 1]  # [1, 10]
         penalty: ['l1', 'l2']
+        random_state: [2193]
+    CostSensitiveRandomForest:
+        n_estimators: [10, 50, 100, 500, 1000, 5000]
+        combination: ['majority_voting', 'weighted_voting', 'stacking', 'stacking_proba']
+        max_features: ['log2', 'sqrt']
+        pruned: [True, False]
+    CostSensitiveLogisticRegression:
+        C: [0.001, 0.01, 1]
+        max_iter: [10, 100, 500]
+        solver: ['ga', 'bfgs']
         random_state: [2193]
