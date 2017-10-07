@@ -5,6 +5,7 @@ DB_USER=$(cat '../config.yaml' | shyaml get-value db.user)
 DB_NAME=$(cat '../config.yaml' | shyaml get-value db.database)
 ROOT_PATH=$(cat '../config.yaml' | shyaml get-value db.root)
 
+echo $DB_HOST
 #'Dropping grids schema'
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP SCHEMA if exists hex_grid_250 CASCADE;"
 psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA hex_grid_250;"

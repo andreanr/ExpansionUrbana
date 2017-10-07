@@ -8,7 +8,7 @@ CREATE TABLE results.models (
   model_type        TEXT,
   model_parameters  JSONB,
   features          TEXT[],
-  year_train        VARCHAR(4),
+  year_train        VARCHAR(20),
   grid_size         TEXT,
   intersect_percent INT,
   costs             JSONB,

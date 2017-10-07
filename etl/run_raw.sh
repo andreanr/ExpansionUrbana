@@ -28,7 +28,7 @@ psql -h $DB_HOST -U $DB_USER -d $DB_NAME < 'results_schema.sql'
 #psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "CREATE SCHEMA results;"
 #
 #echo 'Populating raw data...'
-sh raw/import_ageb_shapefiles.sh
+#sh raw/import_ageb_shapefiles.sh
 #sh raw/import_census.sh
 #sh raw/import_denue.sh
 #sh raw/import_geography.sh
