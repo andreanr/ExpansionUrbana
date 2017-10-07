@@ -41,15 +41,15 @@ CREATE TABLE hex_grid_250.grid (cell_id serial not null primary key);
 SELECT addgeometrycolumn('hex_grid_250', 'grid','cell', 0, 'POLYGON', 2);
 
 DROP FUNCTION genhexagons(float, float, float, float, float);
-CREATE OR REPLACE FUNCTION genhexagons(width float, xmin float,ymin  float,xmax float,ymax float  )
+CREATE OR REPLACE FUNCTION genhexagons(side_length float, xmin float,ymin  float,xmax float,ymax float  )
 RETURNS float AS $total$
 declare
-    b float :=width/2;
-    a float :=b/2; --sin(30)=.5
-    c float :=2*a;
+    c float :=side_length; --lado
+    a float :=c/2; --lado/2
+    b float :=c * sqrt(3)/2; --apotema
     height float := 2*a+c;  --1.1547*width;
-    ncol float :=ceil(abs(xmax-xmin)/width);
-    nrow float :=ceil(abs(ymax-ymin)/width);
+    ncol float :=ceil(abs(xmax-xmin)/(2*b));
+    nrow float :=ceil(abs(ymax-ymin)/(2*c));
 
     polygon_string varchar := 'POLYGON((' ||
                                         0 || ' ' || 0     || ' , ' ||
@@ -61,7 +61,7 @@ declare
                                         0 || ' ' || 0     ||
                                 '))';
 BEGIN
-    INSERT INTO hex_grid_250.grid (cell) SELECT st_translate(cell, x_series*(2*a+c)+xmin, y_series*(2*(a +c))+ymin)
+    INSERT INTO hex_grid_250.grid (cell) SELECT st_translate(cell, x_series*(2*b)+xmin, y_series*(2*(a+c))+ymin)
     from generate_series(0, ncol::int , 1) as x_series,
     generate_series(0, nrow::int,1 ) as y_series,
     (
@@ -78,12 +78,13 @@ $total$ LANGUAGE plpgsql;
 
 with geom_bbox as (
    SELECT
-        250 as width,
+        125 as side_length,
         ST_XMin(buffer_geom) as xmin,
         ST_YMin(buffer_geom) as ymin,
         ST_XMax(buffer_geom) as xmax,
         ST_YMax(buffer_geom) as ymax
 FROM preprocess.buffer_2010
 GROUP BY buffer_geom)
-SELECT genhexagons(width,xmin,ymin,xmax,ymax)
-FROM geom_bbox; 
+SELECT genhexagons(side_length,xmin,ymin,xmax,ymax)
+FROM geom_bbox;
+
