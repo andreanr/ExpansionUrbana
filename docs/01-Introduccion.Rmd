@@ -6,3 +6,11 @@ output:
 La expansión urbana es un fenómeno que ha ocurrido desde siempre, en ocasiones de forma desordenada, generando diversos problemas sociales y ambientales. Por lo que para poder crear una planeación urbana se requiere entendimiento acerca de del comportamiento y los factores que generan que ciudades crezcan. 
 
 Este estudio se busca aplicar y comparar métodos de aprendizaje estadístico que aprende de los patrones del pasado, es decir de las relaciones geográficas, demográficas y económicas que han hecho crecer a la Zona Metropolitana de Chihuahua, para poder entender y poder predecir el creciemiento futuro. 
+
+
+## Alcances 
+
+En este sentido, las contribuciones de este trabajo se pueden resumir en dos grandes
+objetivos:
+  - estudiar el fenómeno de expansión urbana desde perspectivas novedosas utilizando modelos de aprendizaje estadístico. 
+  - La automatización del proceso

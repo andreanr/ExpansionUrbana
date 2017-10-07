@@ -10,16 +10,27 @@ Utilizando métodos ...
 ## Construcción de Base de Datos
 El presente estudio busca aplicar herramientas de aprendizaje estadístico para predecir la expansión urbana de la Zona Metropolitana de Chihuahua a través de características geográficas y demográficas y económicas descritas a continuación.
 
-Debido a la naturaleza de la información de las variables se decidió utilizar una cuadrícula o malla para representar la información. 
+Debido a la naturaleza de la información de las variables se propusó crear un grid de hexagonos que cubran toda el área de influencia del modelo, en este caso la zona metropolitana de Chihuahua. De esta forma se organiza la información relevante obtenida a través de distintas fuentes dentro del grid de tal manera que cada hexagono posee la información asociada a cada área. Además a cada hexagono se le asigna una variable que indica si pertenece o no a la mancha urbana representada por los ageb urbanos.
 
-Se propone crear una malla cuadriculada de polígonos que cubran toda el área de influencia del modelo, en este caso la zona metropolitana de Chihuahua. De esta forma se organiza la información relevante obtenida a través de distintas fuentes dentro de la malla de tal manera que cada cuadrícula posee la información asociada a cada área. Además  a cada cuadrícula se le asigna una variable que indica si pertenece o no a la mancha urbana representada por los ageb.
+Se decidió generar el grid con hexagonos dado a la naturaleza de las variables.
+Explicar porqué los hexagonos!!!!
 
-Construcción de la Malla:
-- Malla: malla cuadriculada de polígonos que cubran toda el área de influencia del modelo de 250 metros x 250 metros.
+
+Construcción del grid:
+- Grid:grid de hexagonos que cubran toda el área de influencia del modelo de 
+      250 metros x 250 metros.
 - Área de influencia: Será sobre la cual se realiza la modelación y se asume que el crecimiento no superará esta área de influencia. Para Chihuahua, se consideró un radio de 7,000 metros.
 
+sistema de coordenadas UTM de la zona 13 Norte, Datum WGS84!!!!
+
+Herramientas utilizadas:
+PostGIS: extensión de la base de datos PostgreSQL que permite gestionar objetos geográficos, donde se utliza PostgreSQL (cita) como base de datos espacial en un Sistema de Información Geográfica (SIG) ^[Ha sido desarrollado por _Refraction Research_ como un proyecto de software libre bajo licencia GLP.].
+
+
+
 ### Datos demográficos
-Se utilizó la información de los censos 2000 y 2010, junto con la del conteo del 2005 \cite{inegi} a nivel AGEB (explicar qué es ageb como i) 
+Se utilizó la información de los censos 2000 y 2010, junto con la del conteo del 2005 [@inegi] a nivel AGEB ^[Área Geográfica Básica: explicar ageb].
+
 se realizó el siguiente procedimiento:
 
 a. Se realizó una transformación de coordenadas correspondientes para tener tanto el shapefile de los AGEB como la malla dentro de las mismas unidades, en este caso UTM zona 13 Norte.  
@@ -33,8 +44,6 @@ d. Para realizarlo, primero se calculó el área de cada polígono de la interse
 e. A partir de las proporciones de área de cada polígono con respecto al área total de AGEB que le corresponde, se calculó la proporción correspondiente para cada variable. Si la variable correspondía a una cantidad total dentro del AGEB, entonces esta variable se multiplicó por la proporción de área obtenida en el inciso (f), mientras que en el caso en el que la variable correspondiera a un promedio entonces se le asoció al polígono el dato del AGEB correspondiente.   
 
 f. A la tabla de atributos de la malla se le agregaron las variables de interés de SCINCE. Para realizar esto, se sumó o promedió, de acuerdo al tipo de variable, la información de los polígonos de la intersección que caían dentro de una misma cuadrícula del grid.   
-
-g. Además, se agregaron las variables ZU_25, ZU_30, ZU_50, ZU_75 a la malla. Estas variables indican si el i% con i={25, 30, 50, 75} de la cuadrícula del grid pertenece o no a la mancha urbana de los AGEB.   
 
 Después de haber incluido las variables de las AGEB urbanas dentro de la malla, se agregó la misma información las localidades rurales que caen dentro del área de influencia (la malla). Para esto, se utilizó la información proveniente de los principales resultados por localidad (ITER) de 2000, 2005 y 2010 (INEGI) y agregaron dentro de la malla de la siguiente manera:
 
@@ -58,30 +67,58 @@ b) Se intersectó el shapefile de las localidades rurales con la malla (se hizo 
 Utilizando la información de las localidades rurales, se incluyó a la malla la distancia mínima, en metros, del centro de cada cuadrícula a la localidad rural más cercana.  Esta variable fue incluida debido a que se considera que las localidades rurales cercanas a la zona urbana tienden a migrar en busca de trabajo y servicios. 
 
 ### Económicos
+
+**_Unidades Económicas_**    
+
 Cercanía a unidades económicas (DENUE) y al centro urbano
 
 la distancia de cada cuadrícula a las unidades económicas grandes y medianas que se encuentran en el Directorio Estadístico Nacional de Unidades Económicas (DENUE). Para realizar esto primero se consideran unidades económicas grandes a las que registren tener a más de 250 empleados y medianas a las que registren entre 51 y 250 empleados. A partir de estas unidades se calculó la distancia mínima en metros que hay desde el centro de cada cuadrícula a estas unidades.
 
-La distancia que hay de cada cuadrícula al centro urbano. Para ello, primero se encontró el centro urbano y se expandió hasta un radio de 1 km, donde se considera que se acumulan las principales actividades económicas del centro urbano. A partir de ese radio se calculo la mínima distancia en metros que hay desde el centro de cada cuadrícula al centro urbano como se muestra en la figura siguiente. 
+!! No hay datos para antes del 2008, por lo que se asume que no han cambiado, sin embargo deberían considerarse únicamente las unidades ecónomicas existentes para cada periodo.
 
+**_Centro Urbano_**    
+
+El centro urbano de la ciudad, se caracteriza por concentrar comercios y servicios de escala urbana en la ciudad y ser sede de las oficinas de gobierno \cite{IMPLAN}. Por lo que se utiliza la distancia a dicho centro como una variable que influye en la expansión. 
+
+Para calcular la distancia hay centro urbano, primero se encontraron las coordenadas del centro urbano [@googlemaps] y se expandió hasta un radio de 1 km, donde se considera que se acumulan las principales actividades económicas del centro urbano. A partir de ese radio se calculo la mínima distancia en metros que hay desde el centro de cada cuadrícula al centro urbano.
 
 ### Vías de Comunicación
-carreteras, vías férreas, aeropuertos
-Después se agregó la distancia que hay de cada cuadrícula a las carreteras o vías principales utilizando el mapa de OpenStreetMap para México. La distancia se calculó como la distancia mínima que hay desde el centroide de cada cuadrícula a la red carretera o vías principales como se muestra en la figura de abajo. Se consideraron los siguientes tipos de vías: 
+Medir la accesibilidad de insumos y productos. La razón por la cual se incluye la distancia a carreteras, vías ferroviarias y aeropuerto.
 
-- Autopistas (motorway, motorway_link)
-- Red primaria (primary, primary_link)
-- Red secundaria (secondary, secondary_link)
-- Red terciaria (tertiary, tertiary_link)
-- Red troncal (trunk, trunk_link)
+**__Carreteras__**
 
+Después se agregó la distancia que hay de cada cuadrícula a las carreteras o vías princiaples (INEGI). 
+
+La distancia se calculó como la distancia mínima que hay desde el centroide de cada cuadrícula a la red carretera o vías principales.
+Se consideraron las siguientes vías:
+
+- Carreteras
+- Avenidas
+- Calles
+
+Además se tomó la distancia mínima a las vías por tipo de derecho: libres o de cuota.Y por número de carriles: 1, 2 y 4 carriles
+
+
+**__Vías Férreas_**
+Las vías ferroviarias en el país son pocas --- bla bla una breve descripción de cómo conectan. Eje norte-sur (Ciudad Juárez - México D.F.) y superponiente-nororiente (Cuauhtémoc - Ojinaga). ¿Quién las utiliza?
+Es notable el uso de un sector de la población que reside al norte de la ciudad como vialidad primaria \cite{IMPLAN}. 
 
 ### Geográficos
-pendiente, se probó con porcentaje de pendiente y en grados.
+
+Se asienta en un valle definido por serranías en los 4 puntos cardinales, así como por dos escurrimientos naturales principales o ríos.
+Tomando como centro el área que ocupa actualmente el centro urbano de la ciudad se tienen los siguientes límites o barreras naturales:
+• Al poniente la Sierra del Mogote con alturas de hasta 2000 m.s.n.m.
+• Al oriente la Sierra de Nombre de Dios o Cerros Colorados, más al oriente de esta, quedando en medio el valle del río Chuvíscar que actualmente acoge a la zona nororiente de la ciudad, las Sierras de San Ignacio y de Santa Eulalia
+• Al norte el valle de Chihuahua se abre por en medio de las Sierras del Mogote y de Nombre de Dios / Cerros Colorados
+• Al sur la Sierra Azul
+Todas las sierras referidas se consideran zonas no urbanizables debido a que cuentan con pendientes iguales o superiores al 20%.
+
+De esta manera existe una división del espacio natural de la ciudad determinada por la extensión de la Sierra de Nombre de Dios y las elevaciones aisladas hasta casi tocar o ser parte el cerro Grande de la Sierra Azul al sur. Tanto el Cerro Grande como el Coronel son considerados por el PDU 2000 como zonas con potencial para decretarse patrimonio natural, e inclusive forman parte del escudo de armas de la capital. (IMPLAN)
+
 
 La pendiente se construyó a partir de la altura de los Modelos Digitales de Elevación (INEGI 2000 a escala de 1:250 metros) la cual viene en formato raster.  
 
-Se extrajo la información del raster para incluirla a la malla por medio  una función que se aplica a los valores del raster (pixeles) que caen dentro de una misma cuadrícula. Se crearon tres varibles distintas una para cada función: 
+Se extrajo la información del raster para incluirla a la malla por medio una función que se aplica a los valores del raster (pixeles) que caen dentro de una misma cuadrícula. Se crearon tres varibles distintas una para cada función: 
 - slope_mean: utilizando el promedio   
 - slope_med: utilizando la mediana   
 - slope_max: utilizando el máximo   
@@ -94,21 +131,28 @@ i) Con la información de INEGi de las capas de uso de suelo:
 - Serie V de 2011- 2013 con año de referencia 2011 que utiliza imágenes LANDSAT (30m)   
 ii) Las categorías de las capas de uso de suelo de las tres series, se reclasificaron y agruparon en 10 categorías, mostradas en la tabla siguiente:   
 
---Tabla Categoría Uso de Suelo
-
-iii) Después se transformaron las coordenadas de las capas de uso de suelo agrupadas, para que estuvieran en el mismo sistema de coordenadas que las mallas (UTM zona 13).   
-
-iv) Se intersectaron las capas de uso de suelo agrupadas con las mallas, cada una con el periodo que le corresponde. A partir de ahí se agregó una variable a la malla que indica el número de la categoría de uso de suelo que ocupa mayor porcentaje de área dentro de la cuadrícula.   
 
 
 ### Label
 Con el fin de poder medir las causas de expansión urbana, se define en este trabajo la  variable de interés (a predecir)  como un cambio en el uso de suelo de no-urbano a urbano, en un periodo de tiempo determinado.
 
-
-
 ## Modelos
+Al realizar los modelos predictivos, se tomararán tres conjuntos de datos:
 
+* Muestra de Entrenamiento: en este caso son los datos de 2000 $(t_{1})$ para predecir la mancha urbana de 2005 $(t_2)$. Estos datos son los que se utilizan para entrenar los modelos.
+$$t_{1} \rightarrow t_{2}$$
+* Muestra de Prueba: en este caso se utilizan los datos de 2005 $(t_{2})$ para predecir la mancha urbana de 2010 $(t_{3})$.Con esta muestra es posible comparar el desempeño de los diferentes modelos. Estos mismo datos nos darán el error real cometido con cada modelo. Esta comparación se realiza analizando qué tanto se ajustan los valores predichos a los reales.
+$$ t_{2} \rightarrow t_{3} $$
+* Muestra de Validación: son los datos que se utilizan para predecir 2015 $(t_{4})$.
+$$ t_{3} \rightarrow t_{4} $$
 
+Se corrieron los modelos:
+- Regresión Lineal (grid parámetros)
+- Bosque Aleatorio (grid parámetros)
+- Extra Árboles (grid parámetros)
+- 
+
+Comparar con lo que se usa normalmente
 
 
  

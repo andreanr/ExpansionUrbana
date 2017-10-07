@@ -6,3 +6,8 @@ output:
 
 automata celular
 Capitulo 1 con resultados
+
+
+Trabajo futuro agregar:
+- Las Líneas de alta tension
+- los acueductos
