@@ -3,9 +3,10 @@
 ############################
 
 grid_size: 'hex_grid_250' # in meters
-year_train: ['2000']
-year_tests: ['2005', '2010']
+years_train: ['2000', '2005']
+year_tests: ['2010']
 #years: ['2000', '2005', '2010'] # years to run
+n_folds: 5
 intersect_percent: 25  #range from (0,100]
 
 model_comment: 'test'
@@ -20,7 +21,6 @@ costos:
     costo_transporte: 100
     interes_antes: 0.5 # costo entre cero y uno
     interes_despues: 2 # costo de construir despues
-
 
 Features:
     # Aeropuertos
@@ -114,30 +114,30 @@ Features:
     viviendas_sin_bienes: True
     viviendas_tv: True
 
-model: ['ExtraTrees'] #, 'LogisticRegression']
+model: ['RandomForest']
 parameters:
     RandomForest:
-        n_estimators: [10, 50, 100, 500, 1000, 5000, 10000]
-        max_depth: [5, 10, 50] #,5,10] #[100, 5, 10, 50] 
+        n_estimators: [10000] #[10, 50, 100, 500, 1000, 5000, 10000]
+        max_depth: [5] #, 10, 50] #,5,10] #[100, 5, 10, 50] 
         max_features: ['log2', 'sqrt'] # ['log2', 2, 4, 8, 16, "auto"]
-        criterion: ['gini', 'entropy']
-        min_samples_split: [2,5,10] #[2,5,10]
+        criterion: ['gini'] #, 'entropy']
+        min_samples_split: [2] #,5,10] #[2,5,10]
         random_state: [2193]
     ExtraTrees:
-        n_estimators: [10, 50, 100, 500, 1000, 5000,10000] #[ 25, 50, 100, 1000, 10000, 50000, 100000]
-        max_depth: [2,5,10] #[5, 10, 50, 100 ]
+        n_estimators: [5000] # [10, 50, 100, 500, 1000, 5000,10000]
+        max_depth: [50] #,10,50] #[5, 10, 50, 100 ]
         max_features: ['log2', 'sqrt'] # [4, 8, 16, "auto"]
-        criterion: ['gini', 'entropy'] #, 'entropy']
-        min_samples_split: [2,5,10] #[2, 5, 10] #, 5, 10]
+        criterion: ['entropy'] #['gini', 'entropy'] 
+        min_samples_split: [10] #,10] #[2, 5, 10] #, 5, 10]
         random_state: [2193]
     LogisticRegression:
         C_reg: [ 0.001, 0.01, 1]  # [1, 10]
         penalty: ['l1', 'l2']
         random_state: [2193]
     CostSensitiveRandomForest:
-        n_estimators: [10, 50, 100, 500, 1000, 5000]
-        combination: ['majority_voting', 'weighted_voting', 'stacking', 'stacking_proba']
-        max_features: ['log2', 'sqrt']
+        n_estimators: [10, 50, 100, 500]
+        combination: ['majority_voting'] #'stacking_proba'] #, 'majority_voting']
+        max_features: [ 5, 10]
         pruned: [True, False]
     CostSensitiveLogisticRegression:
         C: [0.001, 0.01, 1]

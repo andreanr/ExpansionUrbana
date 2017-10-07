@@ -35,7 +35,7 @@ def confusion_matrix_at_x(test_labels, test_prediction_binary_at_x):
     return TP, TN, FP, FN
 
 
-def calculate_all_evaluation_metrics(test_label, test_predictions, test_scores):
+def calculate_all_evaluation_metrics(test_label, test_predictions, test_costs):
     """
     Calculate several evaluation metrics using sklearn for a set of
         labels and predictions.
@@ -45,7 +45,7 @@ def calculate_all_evaluation_metrics(test_label, test_predictions, test_scores):
     :rtype: dict
     """
     all_metrics = dict()
-
+    #test_costs = test_costs.as_matrix()
     # FORMAT FOR DICTIONARY KEY
     # all_metrics["metric|parameter|unit|comment"] OR
     # all_metrics["metric|parameter|unit"] OR
@@ -71,8 +71,12 @@ def calculate_all_evaluation_metrics(test_label, test_predictions, test_scores):
         # accuracy
         all_metrics["auc@|{}".format(str(cutoff))] = (TP + TN) / ((TP + TN + FP + FN)*1.0)
         # cost sensity
-        all_metrics["savings@|{}".format(str(cutoff))] = savings_score(test_label, test_predictions_binary_at_x, test_scores)
-        all_metrics["cost_loss@|{}".format(str(cutoff))] = cost_loss(test_label, test_predictions_binary_at_x, test_scores)
+        all_metrics["savings@|{}".format(str(cutoff))] = savings_score(test_label, test_predictions_binary_at_x, test_costs)
+        all_metrics["cost_loss@|{}".format(str(cutoff))] = cost_loss(test_label, test_predictions_binary_at_x, test_costs)
     return all_metrics
 
+def cv_evaluation_metrics(fold_metrics):
 
+    df_metrics = pd.DataFrame.from_dict(fold_metrics)
+    metrics = df_metrics.T.mean(skipna=True).to_dict()
+    return metrics
