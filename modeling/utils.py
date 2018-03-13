@@ -74,16 +74,16 @@ def get_data(years,
                 USING (cell_id, year)
                 JOIN {grid_size}.grid
                 USING (cell_id)
-                JOIN preprocess.buffer_2010
+                JOIN preprocess.buffer_{year}
                 ON st_intersects(cell, buffer_geom)
                 LEFT JOIN features.costs_{grid_size}
                 USING (cell_id, year)
-                 WHERE year in ({years})"""
+                 WHERE year = '{year}'"""
                 .format(features=", ".join(features),
                         features_table_name=features_table_name,
                         labels_table_name=labels_table_name,
                         grid_size=grid_size,
-                        years=",".join(["'{0}'".format(x) for x in years])))
+                        year=years[0]))
 
     db_engine = get_connection()
     data = pd.read_sql(query, db_engine)

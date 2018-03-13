@@ -19,14 +19,14 @@ def gen_models_to_run(experiment):
     years_train = experiment['years_train']
     features = utils.get_features(experiment)
     grid_size = experiment['grid_size']
-    n_folds = experiment['n_folds']
+    #n_folds = experiment['n_folds']
     costs = experiment['costos']
     features_table_prefix = experiment['features_table_name']
     labels_table_prefix = experiment['labels_table_name']
     intersect_percent = experiment['intersect_percent']
 
     # get data
-    X_index, X, Y, X_costs = utils.get_data(years_train,
+    train_index, train_x, train_y, train_costs = utils.get_data(years_train,
                                             features,
                                             grid_size,
                                             features_table_prefix,
@@ -48,9 +48,9 @@ def gen_models_to_run(experiment):
                               in zip(parameter_names, each_param)}
             # Train
             print('training')
-            modelobj, importances = train(X,
-                                          Y,
-                                          X_costs,
+            modelobj, importances = train(train_x,
+                                          train_y,
+                                          train_costs,
                                           model,
                                           parameters,
                                           2)
@@ -68,53 +68,36 @@ def gen_models_to_run(experiment):
             print('Model id: {}'.format(model_id))
             utils.store_importances(model_id, features, importances)
 
-            kf = KFold(n_splits=n_folds)
-            kf.get_n_splits(X)
-
-            folds_metrics = dict()
-            folds = 1
-            for train_index, test_index in kf.split(X):
-                X_train, X_test = X[train_index], X[test_index]
-                y_train, y_test = Y[train_index], Y[test_index]
-                costs_train, costs_test = X_costs[train_index], X_costs[test_index]
-                # Train
-                print('train model for fold {0}'.format(folds))
-                modelobj_f, _ = train(X_train, y_train, costs_train, model, parameters, 2) 
-                # Test
-                scores = predict_model(modelobj_f, X_test)
-                folds_metrics[folds] = scoring.calculate_all_evaluation_metrics(y_test.tolist(),
-                                                                                scores.tolist(),
-                                                                                costs_test)
-                folds += 1
-
-            metrics = scoring.cv_evaluation_metrics(folds_metrics)
-            utils.store_evaluations(model_id, years_train, metrics)
-
             for year_test in experiment['year_tests']:
-                print('validating')
+                print('testing')
                 print('For year {}'.format(year_test))
-                index_val, X_val, y_val, costs_val  = utils.get_data([year_test],
-                                                                     features,
-                                                                     grid_size,
-                                                                     features_table_prefix,
-                                                                     labels_table_prefix,
-                                                                     intersect_percent)
-                scores = predict_model(modelobj, X_val)
+                test_index, test_x, test_y, test_costs = utils.get_data([year_test],
+                                                                        features,
+                                                                        grid_size,
+                                                                        features_table_prefix,
+                                                                        labels_table_prefix,
+                                                                        intersect_percent)
+
+                scores = predict_model(modelobj, test_x)
                 utils.store_predictions(model_id,
                                         year_test,
-                                        index_val,
+                                        test_index,
                                         scores,
-                                        y_val)
+                                        test_y)
                 print('scoring')
-                metrics = scoring.calculate_all_evaluation_metrics(y_val.tolist(),
-                                                                   scores.tolist(),
-                                                                   costs_val)
-                utils.store_evaluations(model_id, [year_test], metrics)
-            print('Cool')
-            print('--------------------------')
-            print('--------------------------')
+                metrics = scoring.calculate_all_evaluation_metrics(test_y.tolist(),
+                                                                   scores,
+                                                                   test_costs)
 
-    print('Done!')
+
+
+                utils.store_evaluations(model_id, [year_test], metrics)
+
+                print('Cool')
+                print('--------------------------')
+                print('--------------------------')
+
+        print('Done!')
 
 
 def get_feature_importances(model):
