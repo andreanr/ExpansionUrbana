@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import pdb
+import numpy as np
 import yaml
 from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
@@ -53,7 +54,7 @@ def get_features(experiment):
     return [x for x in experiment['Features'] if experiment['Features'][x]==True]
 
 
-def get_data(year,
+def get_data(years,
              features,
              grid_size,
              features_table_prefix,
@@ -82,20 +83,20 @@ def get_data(year,
                         features_table_name=features_table_name,
                         labels_table_name=labels_table_name,
                         grid_size=grid_size,
-                        year=year))
+                        year=years[0]))
 
     db_engine = get_connection()
     data = pd.read_sql(query, db_engine)
     data.set_index('cell_id', inplace=True)
-    costs = data[['cfp','cfn', 'ctp', 'ctn']].as_matrix()
-    return data.ix[:, ~data.columns.isin(['label', 'ctp', 'ctn', 'cfp', 'cfn'])], data['label'], costs
+    costs = np.array(data[['cfp','cfn', 'ctp', 'ctn']])
+    return data.index, np.array(data.ix[:, ~data.columns.isin(['label', 'ctp', 'ctn', 'cfp', 'cfn'])]), np.array(data['label']), costs
 
 
 def store_train(timestamp,
                 model,
                 parameters,
                 features,
-                year_train,
+                years_train,
                 grid_size,
                 intersect_percent,
                 costs,
@@ -122,7 +123,7 @@ def store_train(timestamp,
                                                       model_type=model,
                                                       model_parameters=json.dumps(parameters),
                                                       features=features,
-                                                      year_train=year_train,
+                                                      year_train="-".join(years_train),
                                                       grid_size=grid_size,
                                                       intersect_percent=intersect_percent,
                                                       costs=json.dumps(costs),
@@ -192,6 +193,11 @@ def store_evaluations(model_id, year_test, metrics):
                 pass
         except:
             metric_cutoff = None
+        try:
+            if np.isnan(evaluation):
+                evaluation = 'Null'
+        except:
+            pass
 
         # store
         if metric_cutoff is None:
@@ -203,7 +209,7 @@ def store_evaluations(model_id, year_test, metrics):
                                                     value)
                    VALUES( {0}, {1}, '{2}', {3}, {4}) """
                    .format( model_id,
-                            year_test,
+                            "-".join(year_test),
                             metric,
                             metric_cutoff,
                             evaluation ))

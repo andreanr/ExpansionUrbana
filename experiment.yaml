@@ -2,10 +2,11 @@
 ####### EXPERIMENT #########
 ############################
 
-grid_size: 'hex_grid_250' # in meters
-year_train: ['2000']
-year_tests: ['2005', '2010']
+grid_size: 'hex_grid_1000' # in meters
+years_train: ['2000']
+year_tests: ['2005','2010']
 #years: ['2000', '2005', '2010'] # years to run
+#n_folds: 5
 intersect_percent: 25  #range from (0,100]
 
 model_comment: 'test'
@@ -20,7 +21,6 @@ costos:
     costo_transporte: 100
     interes_antes: 0.5 # costo entre cero y uno
     interes_despues: 2 # costo de construir despues
-
 
 Features:
     # Aeropuertos
@@ -47,7 +47,7 @@ Features:
     min_slope_pct: False
     max_slope_pct: True
     mean_slope_pct: False
-    stddev_slope_pct: True
+    stddev_slope_pct: False
     min_slope_degrees: False
     max_slope_degrees: False
     mean_slope_degrees: False
@@ -60,84 +60,84 @@ Features:
     num_vecinos_urbanos: True
     # censos
     grado_promedio_escolaridad: True
-    hogares_jefe_femenino: True
-    hogares_jefe_masculino: True
-    ocupantes_viviendas: True
-    poblacion_0_a_14: True
-    poblacion_12_mas: True
-    poblacion_15_a_49_femenina: True
-    poblacion_15_mas: True
-    poblacion_15_mas_analfabeta: True
-    poblacion_15_mas_femenina: True
-    poblacion_15_mas_masculina: True
-    poblacion_15_mas_sin_escolaridad: True
-    poblacion_18_mas: True
-    poblacion_18_mas_femenina: True
-    poblacion_18_mas_masculina: True
-    poblacion_5_mas: True
-    poblacion_5_mas_femenina: True
+    hogares_jefe_femenino: False
+    hogares_jefe_masculino: False
+    ocupantes_viviendas: False
+    poblacion_0_a_14: False
+    poblacion_12_mas: False
+    poblacion_15_a_49_femenina: False
+    poblacion_15_mas: False
+    poblacion_15_mas_analfabeta: False
+    poblacion_15_mas_femenina: False
+    poblacion_15_mas_masculina: False
+    poblacion_15_mas_sin_escolaridad: False
+    poblacion_18_mas: False
+    poblacion_18_mas_femenina: False
+    poblacion_18_mas_masculina: False
+    poblacion_5_mas: False
+    poblacion_5_mas_femenina: False
     poblacion_5_mas_lengua_indigena: True
-    poblacion_5_mas_lengua_indigena_y_espanol: True
-    poblacion_5_mas_lengua_indigna_no_espanol: True
-    poblacion_5_mas_residente: True
-    poblacion_5_mas_residente_otra_entidad: True
-    poblacion_60_mas: True
-    poblacion_60_mas_femenina: True
-    poblacion_60_mas_masculina: True
-    poblacion_65_mas: True
-    poblacion_derechohabbiente_salud: True
-    poblacion_femenina: True
-    poblacion_hogares: True
-    poblacion_hogares_jefe_femenino: True
-    poblacion_hogares_jefe_masculino: True
-    poblacion_masculina: True
+    poblacion_5_mas_lengua_indigena_y_espanol: False
+    poblacion_5_mas_lengua_indigna_no_espanol: False
+    poblacion_5_mas_residente: False
+    poblacion_5_mas_residente_otra_entidad: False
+    poblacion_60_mas: False
+    poblacion_60_mas_femenina: False
+    poblacion_60_mas_masculina: False
+    poblacion_65_mas: False
+    poblacion_derechohabbiente_salud: False
+    poblacion_femenina: False
+    poblacion_hogares: False
+    poblacion_hogares_jefe_femenino: False
+    poblacion_hogares_jefe_masculino: False
+    poblacion_masculina: False
     poblacion_sin_derechohabiente_salud: True
     poblacion_total: True
     promedio_hijos_nacidos_vivos: True
-    promedio_ocupantes_cuarto_viviendas: True
+    promedio_ocupantes_cuarto_viviendas: False
     promedio_ocupantes_viviendas: True
-    promedio_relacion_hombres_mujeres: True
+    promedio_relacion_hombres_mujeres: False
     total_hogares: True
-    viviendas_1_cuarto: True
-    viviendas_1_dormitorio: True
+    viviendas_1_cuarto: False
+    viviendas_1_dormitorio: False
     viviendas_agua_entubada: True
-    viviendas_computadora: True
+    viviendas_computadora: False
     viviendas_con_servicios: True
     viviendas_drenaje: True
     viviendas_electricidad: True
     viviendas_excusado: True
     viviendas_habitadas: True
-    viviendas_lavadora: True
+    viviendas_lavadora: False
     viviendas_no_drenaje: True
-    viviendas_particulares_habitadas: True
+    viviendas_particulares_habitadas: False
     viviendas_refrigerador: True
     viviendas_sin_bienes: True
-    viviendas_tv: True
+    viviendas_tv: False
 
-model: ['ExtraTrees'] #, 'LogisticRegression']
+model: ['CostSensitiveRandomForest']
 parameters:
     RandomForest:
-        n_estimators: [10, 50, 100, 500, 1000, 5000, 10000]
+        n_estimators: [1000, 5000, 10000] #[10, 50, 100, 500, 1000, 5000, 10000]
         max_depth: [5, 10, 50] #,5,10] #[100, 5, 10, 50] 
-        max_features: ['log2', 'sqrt'] # ['log2', 2, 4, 8, 16, "auto"]
-        criterion: ['gini', 'entropy']
+        max_features: [5, 10,'auto'] # ['log2', 2, 4, 8, 16, "auto"]
+        criterion: ['gini'] #, 'entropy']
         min_samples_split: [2,5,10] #[2,5,10]
         random_state: [2193]
     ExtraTrees:
-        n_estimators: [10, 50, 100, 500, 1000, 5000,10000] #[ 25, 50, 100, 1000, 10000, 50000, 100000]
-        max_depth: [2,5,10] #[5, 10, 50, 100 ]
+        n_estimators: [5000] # [10, 50, 100, 500, 1000, 5000,10000]
+        max_depth: [50] #,10,50] #[5, 10, 50, 100 ]
         max_features: ['log2', 'sqrt'] # [4, 8, 16, "auto"]
-        criterion: ['gini', 'entropy'] #, 'entropy']
-        min_samples_split: [2,5,10] #[2, 5, 10] #, 5, 10]
+        criterion: ['entropy'] #['gini', 'entropy'] 
+        min_samples_split: [10] #,10] #[2, 5, 10] #, 5, 10]
         random_state: [2193]
     LogisticRegression:
         C_reg: [ 0.001, 0.01, 1]  # [1, 10]
         penalty: ['l1', 'l2']
         random_state: [2193]
     CostSensitiveRandomForest:
-        n_estimators: [10, 50, 100, 500, 1000, 5000]
-        combination: ['majority_voting', 'weighted_voting', 'stacking', 'stacking_proba']
-        max_features: ['log2', 'sqrt']
+        n_estimators: [100, 500] #[10, 50, 100, 500]
+        combination: ['majority_voting'] #'stacking_proba'] #, 'majority_voting']
+        max_features: [ 5, 10]
         pruned: [True, False]
     CostSensitiveLogisticRegression:
         C: [0.001, 0.01, 1]
