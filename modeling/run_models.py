@@ -223,6 +223,7 @@ def define_model(model, parameters, n_cores):
             C=parameters['C'],
             max_iter=parameters['max_iter'],
             random_state=parameters['random_state'],
+            tol=parameters['tol'],
             solver=parameters['solver'])
 
     else:
